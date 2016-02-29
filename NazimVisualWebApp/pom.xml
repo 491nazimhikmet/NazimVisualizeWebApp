@@ -14,6 +14,7 @@
 		<junit.version>4.11</junit.version>
 		<logback.version>1.0.13</logback.version>
 		<jcl-over-slf4j.version>1.7.5</jcl-over-slf4j.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
   <dependencies>
     <dependency>
@@ -22,6 +23,14 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>3.0-alpha-1</version>
+		<scope>provided</scope>
+	</dependency>
+	
     <!-- Spring Core -->
 	<dependency>
 		<groupId>org.springframework</groupId>
@@ -59,11 +68,41 @@
 		<version>${spring.version}</version>
 	</dependency>
 
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>4.1.4.RELEASE</version>
+    </dependency>
+
+    <!-- Spring Security Artifacts - START -->
+    <!-- http://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>3.2.5.RELEASE</version>
+    </dependency>
+
+    <!-- http://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>3.2.5.RELEASE</version>
+    </dependency>
+    <!-- Spring Security Artifacts - END -->
+ 
+
 	<!-- jstl -->
 	<dependency>
 		<groupId>jstl</groupId>
 		<artifactId>jstl</artifactId>
 		<version>${jstl.version}</version>
+	</dependency>
+
+	<!-- MySQL database driver -->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.9</version>
 	</dependency>
   </dependencies>
   <build>
@@ -91,6 +130,7 @@
 		<configuration>
 			<source>${jdk.version}</source>
 			<target>${jdk.version}</target>
+			<argLine>-Dfile.encoding=UTF-8</argLine>
 		</configuration>
 	  </plugin>
 

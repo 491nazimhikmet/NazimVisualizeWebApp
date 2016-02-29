@@ -21,6 +21,7 @@
 		<property name="suffix">
 			<value>.jsp</value>
 		</property>
+		<property name="contentType" value="text/html;charset=UTF-8" />
 	</bean>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/"  

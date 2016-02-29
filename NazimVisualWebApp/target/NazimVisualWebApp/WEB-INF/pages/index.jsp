@@ -1,3 +1,5 @@
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <head>
@@ -15,25 +17,87 @@
 <body>
 
 <div class="container">
-	<ul class="nav nav-tabs">
-		<li role="presentation"><a href="#">Kaydol</a></li>
-		<li role="presentation"><a href="#">Giriş Yap</a></li>
-	</ul>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">
+	      	Nazım
+	      </a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	        <li>
+	        	<form:form commandName="user" method="POST" action="login" class="navbar-form navbar-left" role="search">
+			        <div class="form-group">
+			          <form:input type="text" path="userName" class="form-control" placeholder="Kullanıcı Adı" />
+			          <form:input type="password" path="password" class="form-control" placeholder="Şifre" />
+			        </div>
+			        <button type="submit" class="btn btn-default">Giriş</button>
+			    </form:form>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	<div class="col-md-4"></div>
 	<div class="row col-md-4">
-		<form role="form">
+
+		<c:choose>
+			<c:when test="${empty isSuccess}">
+				
+			</c:when>
+            <c:otherwise>
+            	<c:choose>
+					<c:when test="${isSuccess == false}">
+		                <div class="alert alert-danger" role="alert">
+							${addErrormessage}
+						</div>
+		            </c:when>
+		            <c:otherwise>
+		            	<div class="alert alert-success" role="alert">
+							${addErrormessage}
+						</div>
+		            </c:otherwise>
+	            </c:choose>
+            </c:otherwise>
+        </c:choose>
+
+		
+		<form:form method="POST" commandName="user" action="addMee" role="form">
 			<div class="form-group">
-				<label for="email">Email address:</label>
-				<input type="email" class="form-control" id="email">
+				<form:label path="name" for="adi">Ad:</form:label>
+				<form:input path="name" class="form-control" id="adi"/>
 			</div>
 			<div class="form-group">
-				<label for="pwd">Password:</label>
-				<input type="password" class="form-control" id="pwd">
+				<form:label path="surname" for="soyadi">Soyad:</form:label>
+				<form:input path="surname" class="form-control" id="soyadi"/>
 			</div>
-			<div class="checkbox">
-				<label><input type="checkbox"> Remember me</label>
+			<div class="form-group">
+				<form:label path="email" for="email">Email address:</form:label>
+				<form:input type="email" path="email" class="form-control" id="email"/>
 			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
-		</form>
+			<div class="form-group">
+				<form:label path="userName" for="useradi">Kullanıcı Adı:</form:label>
+				<form:input path="userName" class="form-control" id="useradi"/>
+			</div>
+			<div class="form-group">
+				<form:label path="password" for="pwd">Parola:</form:label>
+				<form:input type="password" path="password" class="form-control" id="pwd"/>
+			</div>
+			
+			<button type="submit" class="btn btn-default">Kaydol</button>
+		</form:form>
 	</div>
 </div>
 </body>
