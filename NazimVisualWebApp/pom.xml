@@ -15,7 +15,17 @@
 		<logback.version>1.0.13</logback.version>
 		<jcl-over-slf4j.version>1.7.5</jcl-over-slf4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<zemberek.version>0.9.0</zemberek.version>
 	</properties>
+	
+	<!-- zemberek nlp repo -->
+	<repositories>
+	    <repository>
+	        <id>ahmetaa-repo</id>
+	        <name>ahmetaa Maven Repo on Github</name>
+	        <url>https://raw.github.com/ahmetaa/maven-repo/master</url>
+	    </repository>
+	</repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -23,7 +33,54 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+   
+   <!-- zemberek nlp dependencies -->
+   <dependency>
+        <groupId>zemberek-nlp</groupId>
+        <artifactId>morphology</artifactId>
+        <version>${zemberek.version}</version>
+    </dependency>
     
+    <dependency>
+        <groupId>zemberek-nlp</groupId>
+        <artifactId>core</artifactId>
+        <version>${zemberek.version}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>zemberek-nlp</groupId>
+        <artifactId>lm</artifactId>
+        <version>${zemberek.version}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>zemberek-nlp</groupId>
+        <artifactId>tokenization</artifactId>
+        <version>${zemberek.version}</version>
+    </dependency>
+   
+   	<!-- Processing core "INSTALLED" --> 
+   	<dependency>
+	    <groupId>processing</groupId>
+	    <artifactId>core</artifactId>
+	    <version>3.0.2</version>
+	</dependency>
+	
+	<!-- WordCram "INSTALLED"  -->
+	<dependency>
+		<groupId>wordcram</groupId>
+		<artifactId>wordcram</artifactId>
+		<version>v1</version>
+	</dependency>
+	
+	<!-- cue.language "INSTALLED"  -->
+	<dependency>
+		<groupId>cue</groupId>
+		<artifactId>language</artifactId>
+		<version>v1</version>
+	</dependency>
+	   	
+   
     <dependency>
 		<groupId>javax.servlet</groupId>
 		<artifactId>servlet-api</artifactId>
@@ -71,9 +128,9 @@
 	<dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
-        <version>4.1.4.RELEASE</version>
+        <version>${spring.version}</version>
     </dependency>
-
+    
     <!-- Spring Security Artifacts - START -->
     <!-- http://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
     <dependency>

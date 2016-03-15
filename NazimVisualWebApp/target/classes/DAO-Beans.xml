@@ -8,5 +8,21 @@
 	<bean id="userDAO" class="cmpe.boun.NazimVisualize.DAO.UserDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<bean id="BookDao" class="cmpe.boun.NazimVisualize.DAO.BookDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="WordDao" class="cmpe.boun.NazimVisualize.DAO.WordDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="WorkDao" class="cmpe.boun.NazimVisualize.DAO.WorkDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="WorkLineDao" class="cmpe.boun.NazimVisualize.DAO.WorkLineDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 </beans>

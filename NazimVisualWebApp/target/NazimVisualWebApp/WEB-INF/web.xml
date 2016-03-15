@@ -33,25 +33,58 @@
 		<url-pattern>/BaseServlet</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>WordCloudServlet</servlet-name>
+		<servlet-class>
+	            cmpe.boun.NazimVisualize.Servlets.WordCloudServlet
+	   	</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>WordCloudServlet</servlet-name>
+		<url-pattern>/WordCloudServlet</url-pattern>
+	</servlet-mapping>
+
  	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/mvc-dispatcher-servlet.xml
 					/WEB-INF/data-source-cfg.xml
-					/WEB-INF/spring-security.xml
 		</param-value>
 	</context-param>
 	
-	<!-- Spring Security Filter -->
+    
+    <!-- login filter -->
     <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>cmpe.boun.NazimVisualize.Servlets.AuthFilter</filter-class>
+        <init-param>
+			<param-name>avoid-urls</param-name>
+			<param-value>/,/giris,/login,/notAuthorized,/addMee,/resources</param-value>
+	   	</init-param>
     </filter>
  
     <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-name>AuthFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
+    <!-- admin filter -->
+    <filter>
+        <filter-name>AdminAuthFilter</filter-name>
+        <filter-class>cmpe.boun.NazimVisualize.Servlets.AdminAuthFilter</filter-class>
+        <init-param>
+			<param-name>look-urls</param-name>
+			<param-value>/adminOperations</param-value>
+	   	</init-param>
+    </filter>
+ 
+    <filter-mapping>
+        <filter-name>AdminAuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <filter>  
 	    <filter-name>encodingFilter</filter-name>  
 	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cmpe.boun.NazimVisualize.VisualOperations.OnurLineGorseli;
+
 public class BaseServlet extends HttpServlet{
 	
 	private String message;
@@ -22,12 +24,23 @@ public class BaseServlet extends HttpServlet{
 	                    HttpServletResponse response)
 	            throws ServletException, IOException
 	  {
+		  System.out.println("baseServletGiris");
+		  
+		  OnurLineGorseli embed = new OnurLineGorseli(400,400,6161,"güneşi içenlerin türküsü",true,true);
+		  embed.init();
+		  
+		  
+		  while(!embed.finished){
+			  
+		  }
+		  System.out.println("linegorseliServletCıkış");
+		  
 	      // Set response content type
 	      response.setContentType("text/html");
 
 	      // Actual logic goes here.
 	      PrintWriter out = response.getWriter();
-	      out.println("<h1>" + message + "</h1>");
+	      out.println(embed.savedFileName);
 	  }
 	  
 	  public void destroy()

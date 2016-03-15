@@ -24,7 +24,7 @@
 	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 	        <span class="sr-only">Toggle navigation</span>
 	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
+	         <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
 	      <a class="navbar-brand" href="#">
@@ -53,7 +53,7 @@
 			        </c:otherwise>
        		 	</c:choose>
 	        <li>
-	        	<form:form commandName="user" method="POST" action="login" class="navbar-form navbar-left" role="search">
+	        	<form:form commandName="user2" method="POST" action="login" class="navbar-form navbar-left" role="search">
 			        <div class="form-group">
 			          <form:input type="text" path="userName" class="form-control" placeholder="Kullanıcı Adı" />
 			          <form:input type="password" path="password" class="form-control" placeholder="Şifre" />
@@ -66,7 +66,10 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
-	<div class="col-md-4"></div>
+	<div class="col-md-8">
+		<img src="${pageContext.request.contextPath}/resources/images/nazimIcon.jpg" class="img-rounded" alt="Cinque Terre" width="304" height="236">
+		<p> Bu site Nazım Hikmet'in şiirlerini görselleştirme çalışmaları hazırlanması için hazırlanmıştır.</p>
+	</div>
 	<div class="row col-md-4">
 
 		<c:choose>
