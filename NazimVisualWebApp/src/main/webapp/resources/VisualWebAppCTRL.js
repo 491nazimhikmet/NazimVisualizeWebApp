@@ -1,3 +1,39 @@
+var app = angular.module('myApp', []);
+
+app.controller('siirAraCtrl', function($scope) {
+	$scope.aramaSonucList = {};
+	$scope.showResults = false;
+	$scope.showSiir = false;
+	$scope.siirIcerik = "";
+
+    $scope.callSearch = function () {
+
+		$.post('searchSiir?',{searchText : $scope.searchTextM},function(response) {
+			$scope.showResults = true;
+
+			$scope.aramaSonucList = response;			
+        });
+
+        /*$.post('searchSiir?',{searchText : $scope.searchTextM},function(response) {
+			$scope.showResults = true;
+
+			$scope.aramaSonucList = response;			
+        });*/
+	}
+
+	$scope.getSiir = function (work) {
+
+		$.get('getSiir?siirId='+work.workID,function(response) {
+			$scope.showSiir = true;
+
+			$scope.siirIcerik = response;
+			console.log(response);
+			$('#siirinKendi').html(response); 
+			
+        });
+	}
+});
+
 $(document).ready(function(){
 	$('#siginModal').hide();
 	$('#sigUpModal').hide();

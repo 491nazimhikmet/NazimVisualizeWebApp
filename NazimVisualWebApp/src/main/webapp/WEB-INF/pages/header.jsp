@@ -33,7 +33,7 @@
 				    </a>
 		    	</li>
 		    	<li>
-		    		<a class="navbar-brand" href="#">
+		    		<a class="navbar-brand" href="#arama">
 				      	Arama
 				    </a>
 		    	</li>

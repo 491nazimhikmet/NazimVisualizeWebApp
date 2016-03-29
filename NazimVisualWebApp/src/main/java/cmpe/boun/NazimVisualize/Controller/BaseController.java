@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.gson.Gson;
+
 import cmpe.boun.NazimVisualize.Base.BaseException;
 import cmpe.boun.NazimVisualize.Base.BaseOperationResponse;
 import cmpe.boun.NazimVisualize.DAO.UserDAO;
@@ -146,6 +148,8 @@ public class BaseController {
 	       
 	       return "adminOperations";
 		}
+	   
+
 	   
 
 }

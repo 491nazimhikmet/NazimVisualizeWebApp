@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap-theme.min.css">
 <script src="${pageContext.request.contextPath}/resources/VisualWebAppCTRL.js"></script>
-<script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>		
+<script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/angular.min.js"></script>			
 <title>Giriş yapıldı</title>
 <script type="text/javascript">
 	var showGiris = false;
@@ -121,6 +122,7 @@
 		</div>
 		<div class="col-md-4"></div>
 	</div>
+	<section style="height: 700px !important;">
 		<div class="row" id="mainModal">
 			
 			<div class="row">
@@ -142,6 +144,8 @@
 				</div> 
 			</div>
 		</div>
+	</section>
+		<%@ include file="searchPoem.html" %>
 		
 
 	</div>

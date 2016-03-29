@@ -1,12 +1,28 @@
 package cmpe.boun.NazimVisualize.DAO;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
 
 public class WorkDao extends DBConnection{
+	
+private Connection conn;
+	
+	public DataSource dataSource;
+	
+	private Statement stmt;
+	
+	public void setDataSource(DataSource dataSource) throws SQLException {
+		this.dataSource = dataSource;
+		conn = dataSource.getConnection();
+		stmt = conn.createStatement();
+	}
 	
 	public Work getWorkByID(int workID) throws SQLException{
 		
@@ -41,6 +57,14 @@ public class WorkDao extends DBConnection{
 	public List<Work> getAllWorks() throws SQLException{
 		String query = "SELECT * FROM Work";
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
+	}
+	
+	public Statement getStmt() {
+		return stmt;
+	}
+
+	public void setStmt(Statement stmt) {
+		this.stmt = stmt;
 	}
 }
 
