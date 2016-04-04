@@ -1,45 +1,48 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<section class="siirAra" id="arama" style="height: 700px !important;">
-	<div class="container">
-		<div class="row" style="margin-top: 30px;" ng-app="myApp" ng-controller="siirAraCtrl">
-			<div class="row">
-				<div class="navbar-form navbar-left form" role="search">
-					<div class="form-group">
-						<input type="text" class="form-control" id="searchText" ng-model="searchTextM" placeholder="Şiir, Kelime vb. Ara">
-					</div>
-					<button class="btn btn-default" ng-click="callSearch()">Ara</button>
+<div class="container">
+	<div class="row" ng-controller="siirAraCtrl">
+		<div class="row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6" role="search">
+				<div class="input-group">
+					<input type="text" class="form-control" id="searchText" ng-model="searchTextM" placeholder="Şiir, Kelime vb. Ara" />
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="callSearch()">Ara</button>
+					</span>
 				</div>
+				
 			</div>
+			<div class="col-sm-3"></div>
+		</div>
 
-			<div class="row">
-				<div ng-show="showResults" class="col-md-6" style="overflow-y: scroll; height:500px;">
-					<table class="table table-condensed">
-						<thead>
-						 	<tr>
-						 		<th>Şiir adı</th>
-						 		<th></th>
-						 	</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="sonuc in aramaSonucList">
-								<td>{{sonuc.name}}</td>
-								<td>
-									<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
-										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-									</button>
-								</td>
-							</tr>
-						</tbody>
-					</table>	
-				</div>
-				<div class="col-md-6">
-					<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
-						<p id="siirinKendi">
-							
-						</p>
-					</div>
+		<div class="row">
+			<div ng-show="showResults" class="col-md-6" style="overflow-y: scroll; height:500px;">
+				<table class="table table-condensed">
+					<thead>
+					 	<tr>
+					 		<th>Şiir adı</th>
+					 		<th></th>
+					 	</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="sonuc in aramaSonucList">
+							<td>{{sonuc.name}}</td>
+							<td>
+								<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
+									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>	
+			</div>
+			<div class="col-md-6">
+				<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
+					<p id="siirinKendi">
+						
+					</p>
 				</div>
 			</div>
 		</div>
 	</div>
-</section> 
+</div>

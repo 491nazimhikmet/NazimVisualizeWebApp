@@ -1,0 +1,27 @@
+Ğ harflerinin kaydeilmesinden kaynaklanan / karakteri probleminin düzeltilmesi
+
+UPDATE `word` SET text = REPLACE(text,'⁄','Ğ') WHERE text like ('%⁄%')
+
+
+Kelime frequecny lerinin yıllara göre dağılımı
+
+Select year,sum(k.cnt) as frequency
+    from (
+        select IF(w.year is null or w.year = '',b.year,w.year) as year,t.cnt
+        from work w,book b,
+            (
+                select workId,sum(k.wrdCnt) as cnt 
+                from workLine a ,
+                    (
+                        SELECT workLineId,count(*) as wrdCnt FROM `word`
+                        WHERE text like '%güneş%'
+                        group by workLineId
+                    ) k
+                where a.lineId = k.workLineId
+                group by workId
+            ) t
+        where w.bookId = b.bookId
+        and t.workId = w.workId
+    ) k
+group by year
+

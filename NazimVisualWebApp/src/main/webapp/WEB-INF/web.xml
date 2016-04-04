@@ -19,32 +19,7 @@
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>BaseServlet</servlet-name>
-		<servlet-class>
-	            cmpe.boun.NazimVisualize.Servlets.BaseServlet
-	   	</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>BaseServlet</servlet-name>
-		<url-pattern>/BaseServlet</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>WordCloudServlet</servlet-name>
-		<servlet-class>
-	            cmpe.boun.NazimVisualize.Servlets.WordCloudServlet
-	   	</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>WordCloudServlet</servlet-name>
-		<url-pattern>/WordCloudServlet</url-pattern>
-	</servlet-mapping>
+		
 
  	<context-param>
 		<param-name>contextConfigLocation</param-name>
