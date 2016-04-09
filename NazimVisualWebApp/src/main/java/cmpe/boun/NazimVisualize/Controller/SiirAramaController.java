@@ -34,7 +34,8 @@ public class SiirAramaController {
 	public void searchSiir(@ModelAttribute("searchText") String searchText, HttpServletResponse response)
 			throws Exception {
 
-		System.out.println("girdi şlölülğ  : "+searchText);
+		//String searchText = data;
+		System.out.println("aranan kelime  : "+searchText);
 		
 		List<Work> workSonuclar = workdao.getWorksByWordName(searchText);
 
@@ -46,13 +47,13 @@ public class SiirAramaController {
 
 	}
 	
-	@RequestMapping(value = "/getSiir", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-	public void getSiir(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+	@RequestMapping(value = "/getSiir", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getSiir(@ModelAttribute("siirId") int siirId, HttpServletResponse response)
 			throws Exception {
 
 		System.out.println(siirId);
 		
-		List<WorkLine> workLines = worklinedao.getWorkLineOfAWork(Integer.parseInt(siirId));
+		List<WorkLine> workLines = worklinedao.getWorkLineOfAWork(siirId);
 
 		String siir = "";
 		for(WorkLine line : workLines){

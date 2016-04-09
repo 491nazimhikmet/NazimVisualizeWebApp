@@ -12,6 +12,10 @@
 <script src="${pageContext.request.contextPath}/resources/angular.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap-theme.min.css">
+<script src="${pageContext.request.contextPath}/resources/CTRLs/app.js"></script>
+<script src="${pageContext.request.contextPath}/resources/CTRLs/anaSayfaCTRL.js"></script>
+<script src="${pageContext.request.contextPath}/resources/CTRLs/girisCTRL.js"></script>
+<script src="${pageContext.request.contextPath}/resources/CTRLs/siirAraCtrl.js"></script>
 <script src="${pageContext.request.contextPath}/resources/VisualWebAppCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <title>Giriş yapıldı</title>
@@ -63,7 +67,7 @@
 			<div ng-show="showGirisSayfasi">
 				<%@ include file="girisSayfasi.html" %>
 			</div>
-			<div ng-show="showAramaSayfasi">
+			<div ng-show="showAramaSayfasi" ng-controller="siirAraCtrl">
 				<%@ include file="searchPoem.html" %>
 			</div>
 			<div class="bottomArrow">

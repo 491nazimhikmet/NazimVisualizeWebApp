@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmpe.boun.NazimVisualize.Model.Book;
+import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.User;
 import cmpe.boun.NazimVisualize.Model.Word;
 import cmpe.boun.NazimVisualize.Model.Work;
@@ -85,7 +86,7 @@ public class Extractors {
 			word.setWordID(rs.getInt("wordId"));
 			word.setWordStart(rs.getDouble("wordStart"));
 			word.setWorkLineID(rs.getInt("workLineId"));
-				
+			word.setDisambiguated(rs.getString("disambiguated"));
 			result.add(word);
 		}
 		
@@ -109,5 +110,17 @@ public class Extractors {
 		return result;
 	}
 	
-	
+	public static List<TermFreqYear> extractTermFreqYear(ResultSet rs) throws SQLException{
+		List<TermFreqYear> result = new ArrayList<TermFreqYear>();
+		
+		while(rs.next()){
+			TermFreqYear yearFreq = new TermFreqYear();
+			yearFreq.setYear(rs.getInt("year"));
+			yearFreq.setFrequency(rs.getInt("frequency"));
+			
+			result.add(yearFreq);
+		}
+		
+		return result;
+	}
 }

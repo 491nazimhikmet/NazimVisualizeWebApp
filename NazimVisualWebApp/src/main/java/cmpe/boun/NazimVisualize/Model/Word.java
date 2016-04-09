@@ -13,6 +13,8 @@ public class Word {
 	private boolean isItalic;
 	private String font;
 	
+	private String disambiguated;
+	
 	private List<Word> words;
 
 	
@@ -112,5 +114,15 @@ public class Word {
 	@Override
 	public String toString(){
 		return text;
+	}
+
+
+	public String getDisambiguated() {
+		return disambiguated;
+	}
+
+
+	public void setDisambiguated(String disambiguated) {
+		this.disambiguated = disambiguated;
 	}
 }
