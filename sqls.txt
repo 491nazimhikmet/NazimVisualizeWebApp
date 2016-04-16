@@ -46,3 +46,20 @@ Select location,sum(k.cnt) as frequency
     ) k
 group by location
 
+select * from book where bookId in (select bookId from work where workID in (select workID from workLine where lineId in (SELECT workLineId FROM `word` WHERE disambiguated LIKE 'dalga')))
+
+
+select b.*,o.cnt from book b, (select w.bookId, sum(t.cnt) as cnt from work w,
+            (select workId,sum(k.wrdCnt) as cnt 
+                from workLine a ,
+                    (
+                        SELECT workLineId,count(*) as wrdCnt FROM `word`
+                        WHERE lower(disambiguated) like lower('%güneş%')
+                        group by workLineId
+                    ) k
+                where a.lineId = k.workLineId
+                group by workId) t
+        where t.workId = w.workId
+        group by w.bookId) o
+        where b.bookId = o.bookId
+        
