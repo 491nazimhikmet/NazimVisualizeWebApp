@@ -50,7 +50,9 @@ private Connection conn;
 	public List<Work> getWorksByWordName(String search) throws Exception{
 		String query = "Select * from `work` where workId in( "+
 							"Select distinct(workId) from workLine where lineId in ( "+
-								"SELECT distinct(`workLineId`) FROM `word` WHERE lower(text) like lower('%"+search+"%')))";
+								"SELECT distinct(`workLineId`) FROM `word` "
+								//+ "WHERE lower(text)like lower('%"+search+"%')))";
+								+ "WHERE lower(disambiguated)like lower('"+search+"')))";
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}
 	

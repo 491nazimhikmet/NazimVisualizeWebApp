@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.Word;
 
@@ -51,7 +52,7 @@ public class WordDao extends DBConnection{
 			         "       from workLine a , "+
 			          "          ( "+
 			           "             SELECT workLineId,count(*) as wrdCnt FROM `word` "+
-			            "            WHERE text like '%"+term+"%' "+
+			            "            WHERE lower(disambiguated) like lower('"+term+"') "+
 			             "           group by workLineId "+
 			              "     ) k "+
 			               " where a.lineId = k.workLineId "+
@@ -64,6 +65,31 @@ public class WordDao extends DBConnection{
 		return Extractors.extractTermFreqYear(this.getStmt().executeQuery(query));
 	}
 
+	
+	public List<TermFreqPlace> getFreqOverPlaceOfTerm(String term)throws SQLException{
+		String query =
+				"Select location,sum(k.cnt) as frequency "+
+			    "from ( "+
+			     "   select IF(w.LocationOfComp is null or w.LocationOfComp = '',b.location,w.LocationOfComp) as location,t.cnt "+
+			      "  from work w,book b, "+
+			       "     ( "+
+			        "        select workId,sum(k.wrdCnt) as cnt "+ 
+			         "       from workLine a , "+
+			          "          ( "+
+			           "             SELECT workLineId,count(*) as wrdCnt FROM `word` "+
+			            "            WHERE lower(disambiguated) like lower('"+term+"') "+
+			             "           group by workLineId "+
+			              "     ) k "+
+			               " where a.lineId = k.workLineId "+
+			                " group by workId "+
+			            ") t "+
+			        "where w.bookId = b.bookId "+
+			        "and t.workId = w.workId "+
+			    ") k "+
+			"group by location";
+		return Extractors.extractTermFreqPlace(this.getStmt().executeQuery(query));
+	}
+	
 	public Statement getStmt() {
 		return stmt;
 	}

@@ -18,4 +18,159 @@
 			</div> 
 		</div>
 	</div>
+	<div class="row">
+		<canvas  id="canvas1"></canvas><!--data-processing-sources="controlling.pde"-->
+		<canvas id="canvas2"></canvas>
+
+		<script type="application/javascript">
+			var TermFreqYear = function(year,frequency){
+				this.year = year;
+				this.frequency = frequency;
+			};
+
+			TermFreqYear.prototype.toString = function(first_argument) {
+				console.log(this.year + " " + this.frequency);
+			};
+
+			var yearFreqList = {};
+
+			$.post('getWordFrequencyData',{searchText : "güneş"},function(responseList) {
+				yearFreqList = responseList;
+				//console.log(yearFreqList);
+		     
+
+				function getMaxFreqMinMaxYear(){
+					var maxFreq = 0;
+					var minYear = 10000;
+					var maxYear = 0;
+					for (var i = 0; i < yearFreqList.length; i++) {
+						if (yearFreqList[i].frequency > maxFreq && yearFreqList[i].year != 0)
+							maxFreq = yearFreqList[i].frequency;
+						
+						if(yearFreqList[i].year < minYear && yearFreqList[i].year != 0)
+							minYear = yearFreqList[i].year;
+						
+						if(yearFreqList[i].year > maxYear)
+							maxYear = yearFreqList[i].year;
+					}
+					return [maxFreq,minYear,maxYear];	 
+				}
+
+				function sketchProc2(processing) {
+					processing.setup = function(){
+						/*processing.width = 300;
+						processing.height = 300;*/
+						
+						processing.size(350,250);
+						processing.noLoop();
+					};
+
+					// Override draw function, by default it will be called 60 times per second
+					processing.draw = function() {
+						processing.background(80);
+						
+						var width = processing.width;
+						var height = processing.height;
+						var margin = 15;
+						var rectX = 1;
+
+						var maxFreqMinMaxYear = getMaxFreqMinMaxYear();
+						var textSize = processing.map(width, 0, 3200, 10, 30);
+						margin = Math.round( processing.map(height, 0, 2000, 0, 200) );
+						rectX = processing.map(width, 0, 3200, 0, 10);
+
+						/*processing.textSize(textSize);
+						processing.textAlign(processing.LEFT, processing.TOP);
+						processing.textLeading(textSize); 
+						processing.text("Zamanı bulunamayanların sıklığı : " + 15,15,15);*/
+
+						for (var i = 0; i < yearFreqList.length; i++) {
+							var currentYear = yearFreqList[i];
+
+							if (currentYear.year == 0) {
+								processing.textSize(textSize);
+								processing.textAlign(processing.LEFT, processing.TOP);
+								processing.textLeading(textSize); 
+								processing.text("Zamanı bulunamayanların sıklığı : " + currentYear.frequency,margin,margin-100);
+								continue;
+							}
+
+							var xPosDataOne = processing.map(currentYear.year, maxFreqMinMaxYear[1]-1, maxFreqMinMaxYear[2], 0 + margin, width - margin);
+							var yPosDataOne = processing.map(currentYear.frequency, 0, maxFreqMinMaxYear[0], 0, height - Math.round(1.3 * margin));
+
+							var year = currentYear.year + "";
+							var newYear = year;
+							
+							/*for(var l = 0; l<year.length(); l++){
+								newYear += year.charAt(l)+"\n";
+							}*/
+
+							processing.fill(226, 229, 100);
+							processing.rectMode(processing.CORNER);
+							processing.rect(xPosDataOne, height - margin, rectX, -1 * yPosDataOne);
+							
+							processing.textSize(textSize);
+							processing.textAlign(processing.LEFT, processing.TOP);
+							processing.textLeading(textSize); 
+							processing.text(newYear,xPosDataOne,height - margin);
+							
+							processing.textAlign(processing.LEFT, processing.BOTTOM);
+							processing.textSize(textSize);
+							processing.text(currentYear.frequency,xPosDataOne,height-margin-yPosDataOne);
+						}
+
+					};
+				}
+
+
+
+				var canvas2 = document.getElementById("canvas2");
+				// attaching the sketchProc function to the canvas
+				var processingInstance2 = new Processing(canvas2, sketchProc2);
+				//processingInstance2.noStroke();
+
+			});
+		</script>
+
+		<script type="application/javascript">
+			function sketchProc(processing) {
+			   // Override draw function, by default it will be called 60 times per second
+			   processing.draw = function() {
+			     // determine center and max clock arm length
+			     var centerX = processing.width / 2, centerY = processing.height / 2;
+			     var maxArmLength = Math.min(centerX, centerY);
+
+			     function drawArm(position, lengthScale, weight) {
+			     	processing.strokeWeight(weight);
+			     	processing.line(centerX, centerY,
+			     		centerX + Math.sin(position * 2 * Math.PI) * lengthScale * maxArmLength,
+			     		centerY - Math.cos(position * 2 * Math.PI) * lengthScale * maxArmLength);
+			     }
+
+			     // erase background
+			     processing.background(224);
+
+			     var now = new Date();
+
+			     // Moving hours arm by small increments
+			     var hoursPosition = (now.getHours() % 12 + now.getMinutes() / 60) / 12;
+			     drawArm(hoursPosition, 0.5, 5);
+
+			     // Moving minutes arm by small increments
+			     var minutesPosition = (now.getMinutes() + now.getSeconds() / 60) / 60;
+			     drawArm(minutesPosition, 0.80, 3);
+
+			     // Moving hour arm by second increments
+			     var secondsPosition = now.getSeconds() / 60;
+			     drawArm(secondsPosition, 0.90, 1);
+			 };
+			}
+
+			var canvas = document.getElementById("canvas1");
+			 // attaching the sketchProc function to the canvas
+			 var processingInstance = new Processing(canvas, sketchProc);
+		
+			 //processingInstance.noLoop();
+		</script>
+	</div>
 </div>

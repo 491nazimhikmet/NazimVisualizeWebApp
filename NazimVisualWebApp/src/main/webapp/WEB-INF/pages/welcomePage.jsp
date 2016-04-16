@@ -58,7 +58,7 @@
 		</div>
 
 		
-		<div class="sections">
+		<div class="sections" style="margin-bottom: 50px;">
 
 			<div class="topumArr">
 				<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>

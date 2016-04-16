@@ -154,12 +154,13 @@ public class WordCramCloud extends PApplet{
 		
 			returnArray = new String[wordList.size()];
 			
-			TurkishMorphParser parser;
+			/*TurkishMorphParser parser;
 			parser = TurkishMorphParser.createWithDefaults();
-			Tokenize tokenize = new Tokenize(parser);
+			Tokenize tokenize = new Tokenize(parser);*/
 			
 			for(int i =0 ; i< wordList.size(); i++){
-				returnArray[i] = tokenize.parse(wordList.get(i).getText());
+				//returnArray[i] = tokenize.parse(wordList.get(i).getText());
+				returnArray[i] = wordList.get(i).getDisambiguated();
 			}
 			
 		} catch (Exception e) {

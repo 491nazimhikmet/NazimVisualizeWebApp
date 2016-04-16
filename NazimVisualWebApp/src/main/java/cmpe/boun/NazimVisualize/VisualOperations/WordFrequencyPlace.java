@@ -7,26 +7,26 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import cmpe.boun.NazimVisualize.DAO.WordDao;
+import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import processing.core.PApplet;
 
-public class WordFrequencyGraph extends PApplet {
+public class WordFrequencyPlace extends PApplet {
 	int width;
 	int height;
 	String term;
 	
 	public String saveFileName;
 
-	public WordFrequencyGraph(int width, int height, String term) {
+	public WordFrequencyPlace(int width, int height, String term) {
 		this.width = width;
 		this.height = height;
 		this.term = term;
-		saveFileName = Math.random() * 255 + "c.png";
+		saveFileName = Math.random() * 255 + "d.png";
 	}
 
 	public void setup() {
 		size(width, height);
-		//smooth();
 		noLoop();
 	}
 	
@@ -45,30 +45,30 @@ public class WordFrequencyGraph extends PApplet {
 		background(55,112,130);
 		noStroke();
 
-		ArrayList<TermFreqYear> yearFreq;
+		ArrayList<TermFreqPlace> placeFreq;
 		try {
-			yearFreq = new ArrayList<TermFreqYear>(wordDao.getFreqOverYearsOfTerm(term));
+			placeFreq = new ArrayList<TermFreqPlace>(wordDao.getFreqOverPlaceOfTerm(term));
 
-			int[] maxFreqMinMaxYear = getMaxFreqMinMaxYear(yearFreq);
+			int[] maxFreqMinMaxYear = getMaxFreqMinMaxYear(placeFreq);
 
 			float textSize = map(width, 0, 3200, 10, 30);
-			margin = (int)map(height, 0, 2000, 0, 200);
+			margin = (int)map(height, 0, 2000, 100, 400);
 			rectX = map(width, 0, 3200, 0, 10);
-			for (int i = 0; i < yearFreq.size(); i++) {
-				TermFreqYear currentYear = yearFreq.get(i);
-				if (currentYear.getYear() == 0) {
+			for (int i = 0; i < placeFreq.size(); i++) {
+				TermFreqPlace currentPlace = placeFreq.get(i);
+				if (currentPlace.getPlace().equals("")) {
 					textSize(textSize);
 					textAlign(LEFT, TOP);
 					textLeading(textSize); 
-					text("Aramanın tarihi bulunamayan tekrar sayısı : " + currentYear.getFrequency(),0,0);
+					text("Aramanın yeri bulunamayan tekrar sayısı : " + currentPlace.getFrequency(),0,0);
 
 					continue;
 				}
 				
-				float xPosDataOne = map(currentYear.getYear(), maxFreqMinMaxYear[1]-1, maxFreqMinMaxYear[2], 0 + margin, width - margin);
-				float yPosDataOne = map(currentYear.getFrequency(), 0, maxFreqMinMaxYear[0], 0, height - (int)(1.3 * margin));
+				float xPosDataOne = map(currentPlace.getYear(), maxFreqMinMaxYear[1]-1, maxFreqMinMaxYear[2], 0 + margin, width - margin);
+				float yPosDataOne = map(currentPlace.getFrequency(), 0, maxFreqMinMaxYear[0], 0, height - (int)(1.3 * margin));
 									
-				String year = currentYear.getYear() + "";
+				String year = currentPlace.getPlace();
 				
 				fill(104, 58, 58);
 				rectMode(CORNER);
@@ -77,7 +77,7 @@ public class WordFrequencyGraph extends PApplet {
 		
 				textAlign(LEFT, BOTTOM);
 				textSize(textSize);
-				text(currentYear.getFrequency(),xPosDataOne,height-margin-yPosDataOne);
+				text(currentPlace.getFrequency(),xPosDataOne,height-margin-yPosDataOne);
 				
 				fill(159, 179, 186);
 				pushMatrix() ;
@@ -100,7 +100,7 @@ public class WordFrequencyGraph extends PApplet {
 
 	}
 
-	private int[] getMaxFreqMinMaxYear(ArrayList<TermFreqYear> yearFreq) {
+	private int[] getMaxFreqMinMaxYear(ArrayList<TermFreqPlace> yearFreq) {
 		int maxFreq = 0;
 		int minYear = 10000;
 		int maxYear = 0;

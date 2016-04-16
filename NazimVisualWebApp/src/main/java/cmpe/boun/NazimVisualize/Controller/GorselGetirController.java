@@ -24,6 +24,7 @@ import cmpe.boun.NazimVisualize.Model.WorkLine;
 import cmpe.boun.NazimVisualize.VisualOperations.OnurLineGorseli;
 import cmpe.boun.NazimVisualize.VisualOperations.WordCramCloud;
 import cmpe.boun.NazimVisualize.VisualOperations.WordFrequencyGraph;
+import cmpe.boun.NazimVisualize.VisualOperations.WordFrequencyPlace;
 
 @Controller
 public class GorselGetirController {
@@ -79,18 +80,31 @@ public class GorselGetirController {
 	}
 	
 	@RequestMapping(value = "/WordFrequencyGraphServlet",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public void WordFrequencyGraphServlet(@ModelAttribute("searchText") String searchText,HttpServletResponse response)throws Exception {
+	public void WordFrequencyGraphServlet(@ModelAttribute("searchText") String searchText,
+											@ModelAttribute("drawType") String drawType, //1: zaman, 2:mekan, 3:kitap
+											HttpServletResponse response)throws Exception {
 
 		System.out.println("WordFrequencyGraphServlet");
-
+		
+		//int type = Integer.parseInt(drawType);
+		
 		WordFrequencyGraph embed = new WordFrequencyGraph(1920, 1080, searchText);
 		embed.init();
+		
+		
 
 		while (!embed.finished) {
 
 		}
 		System.out.println("WordFrequencyGraphServlet");
 
+		WordFrequencyPlace embed2 = new WordFrequencyPlace(1920, 1080, searchText);
+		embed2.init();
+		
+		while (!embed2.finished) {
+
+		}
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 

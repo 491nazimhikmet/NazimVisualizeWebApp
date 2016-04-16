@@ -14,7 +14,7 @@ Select year,sum(k.cnt) as frequency
                 from workLine a ,
                     (
                         SELECT workLineId,count(*) as wrdCnt FROM `word`
-                        WHERE text like '%güneş%'
+                        WHERE lower(disambiguated) like lower('%güneş%')
                         group by workLineId
                     ) k
                 where a.lineId = k.workLineId
@@ -24,4 +24,25 @@ Select year,sum(k.cnt) as frequency
         and t.workId = w.workId
     ) k
 group by year
+
+
+Select location,sum(k.cnt) as frequency
+    from (
+        select IF(w.LocationOfComp is null or w.LocationOfComp = '',b.location,w.LocationOfComp) as location,t.cnt
+        from work w,book b,
+            (
+                select workId,sum(k.wrdCnt) as cnt 
+                from workLine a ,
+                    (
+                        SELECT workLineId,count(*) as wrdCnt FROM `word`
+                        WHERE lower(disambiguated) like lower('%güneş%')
+                        group by workLineId
+                    ) k
+                where a.lineId = k.workLineId
+                group by workId
+            ) t
+        where w.bookId = b.bookId
+        and t.workId = w.workId
+    ) k
+group by location
 

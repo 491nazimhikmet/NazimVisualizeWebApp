@@ -36,12 +36,15 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
     	});
 
 
-        BaseAPI.callServlet('WordFrequencyGraphServlet',{searchText : $scope.searchTextM}).then(function(responseText) {
+        BaseAPI.callServlet('WordFrequencyGraphServlet',{searchText : $scope.searchTextM,drawType:"1"}).then(function(responseText) {
         	$scope.showResults = true;
 
 			$('#imgFrequency').attr('src',$scope.baseImagePathUrl+responseText); 
             $('#imgFrequency')[0].src = $scope.baseImagePathUrl+responseText; 
-        	$("#imgFrequency").show();	
+        	$("#imgFrequency").show();
+
+        	$('#imgFrequency2').attr('src',$scope.baseImagePathUrl+responseText); 
+        	$('#imgFrequency3').attr('src',$scope.baseImagePathUrl+responseText); 	
 
         	loadEnded();		
         });

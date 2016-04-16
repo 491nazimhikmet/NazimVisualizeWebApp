@@ -1,6 +1,7 @@
 package cmpe.boun.NazimVisualize.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 
+import cmpe.boun.NazimVisualize.DAO.WordDao;
 import cmpe.boun.NazimVisualize.DAO.WorkDao;
 import cmpe.boun.NazimVisualize.DAO.WorkLineDao;
+import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
 
@@ -29,6 +32,7 @@ public class SiirAramaController {
 	
 	WorkDao workdao = (WorkDao) context.getBean("WorkDao");
 	WorkLineDao worklinedao = (WorkLineDao) context.getBean("WorkLineDao");
+	WordDao wordDao = (WordDao) context.getBean("WordDao");
 
 	@RequestMapping(value = "/searchSiir", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public void searchSiir(@ModelAttribute("searchText") String searchText, HttpServletResponse response)
@@ -48,12 +52,12 @@ public class SiirAramaController {
 	}
 	
 	@RequestMapping(value = "/getSiir", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public void getSiir(@ModelAttribute("siirId") int siirId, HttpServletResponse response)
+	public void getSiir(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
 			throws Exception {
 
 		System.out.println(siirId);
 		
-		List<WorkLine> workLines = worklinedao.getWorkLineOfAWork(siirId);
+		List<WorkLine> workLines = worklinedao.getWorkLineOfAWork(Integer.parseInt(siirId));
 
 		String siir = "";
 		for(WorkLine line : workLines){
@@ -61,6 +65,22 @@ public class SiirAramaController {
 		}
 		
 		String json = new Gson().toJson(siir);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
+	@RequestMapping(value = "/getWordFrequencyData", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWordFrequencyData(@ModelAttribute("searchText") String searchText, HttpServletResponse response)
+			throws Exception {
+
+		System.out.println("getWordFrequencyData "+ searchText);
+		
+		ArrayList<TermFreqYear> yearFreq = new ArrayList<TermFreqYear>(wordDao.getFreqOverYearsOfTerm(searchText));
+		
+		String json = new Gson().toJson(yearFreq);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
