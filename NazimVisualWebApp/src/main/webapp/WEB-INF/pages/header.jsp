@@ -37,11 +37,11 @@
 				      	Arama
 				    </a>
 		    	</li>
-		    	<!--<li>
-		    		<a class="navbar-brand" href="#">
+		    	<li>
+		    		<a class="navbar-brand" href="#arama" ng-show="showAramaSonuc" ng-click="showSection(3)">
 				      	Arama Görselleri
 				    </a>
-		    	</li>-->
+		    	</li>
 		    	<li>
 		    		<a class="navbar-brand" href="#">
 				      	Detaylı Arama

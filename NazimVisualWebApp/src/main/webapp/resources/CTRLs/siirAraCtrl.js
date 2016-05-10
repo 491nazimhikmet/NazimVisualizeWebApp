@@ -2,11 +2,9 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	$scope.aramaSonucList = {};
 	$scope.showResults = false;
 	$scope.showSiir = false;
-	$scope.siirIcerik = "";
 	$scope.seciliSiir = 0;
 	$scope.gorselSonucShow = false;
-	$scope.showProgressBar = false;
-	$scope.zazaa = "zazzzzzza";
+	//$scope.showProgressBar = false;
 
 	$scope.baseImagePathUrl = appConfig.baseImagePathUrl;
 
@@ -52,12 +50,45 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
         
 	}
 
+	$scope.getGorsel = function(type){
+		if($scope.seciliSiir <= 0 ){
+			bootbox.alert("Lütfen bir şiir seçiniz");
+		}else{
+			$scope.$parent.showAramaSonuc = true;
+			$scope.$parent.showSection(3);
+			$scope.showSiir = false;
+			$scope.gorselSonucShow = false;
+			if(type == 1){
+				$scope.siiriOku();
+			}else if(type == 2){
+				$scope.getWordCloud();
+			}else if(type == 3){
+				$scope.getRandomLines();
+			}else if(type == 4){
+				//wordNet
+			}else{
+				$scope.$parent.showAramaSonuc = false;
+				$scope.$parent.showSection(2);
+			}
+		}
+	}
+
+	$scope.siiriOku = function(){
+		loadProgress();
+		
+		BaseAPI.callServlet('getSiir',{siirId:$scope.seciliSiir+""}).then(function(response) {
+			$scope.showSiir = true;
+			$scope.gorselSonucShow = true;
+			console.log(response);
+			$('#siirinKendi').html(response); 
+			loadEnded();
+        });
+	}
+
 	$scope.getSiir = function (work) {
 		loadProgress();
 		BaseAPI.callServlet('getSiir',{siirId:work.workID+""}).then(function(response) {
 			$scope.showSiir = true;
-
-			$scope.siirIcerik = response;
 			console.log(response);
 			$('#siirinKendi').html(response); 
 			loadEnded();
@@ -66,7 +97,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 	$scope.getWordCloud = function(){
 		loadProgress();
-		$scope.zazaa = 6;
 		BaseAPI.callServlet('WordCloudServlet',{siirId:$scope.seciliSiir+""}).then(function(responseText) {
 			$scope.gorselSonucShow = true;
 
@@ -94,12 +124,12 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	}
 
 	function loadProgress(){
-			$scope.showProgressBar = true;
+			$scope.$parent.showLoading(); 
 				
 	}
 
 	function loadEnded(){
-			$scope.showProgressBar = false;
+			$scope.$parent.showLoaded(); 
 	}
 
 }]);

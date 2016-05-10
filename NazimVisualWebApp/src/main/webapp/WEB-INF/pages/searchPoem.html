@@ -12,7 +12,7 @@
 	.modal {
 		display: none; /* Hidden by default */
 		position: fixed; /* Stay in place */
-		z-index: 1000; /* Sit on top */
+		z-index: 1050; /* Sit on top */
 		left: 0;
 		top: 0;
 		width: 100%; /* Full width */
@@ -76,16 +76,11 @@
 	}
 </script>
 
-<div class="progress ng-hide" style="position:fixed; top:30%; left: 25%; width: 50%; position:center; " ng-show="showProgressBar">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-     	İşlem yapılıyor lütfen bekleyiniz
-    </div>
-</div>
 
-<div class="container" ng-show="!showProgressBar">
+<div class="container">
 
 	<!-- The Modal -->
-	<div id="myModal" class="modal" style="z-index: 10000;">
+	<div id="myModal" class="modal" style="z-index: 1050;">
 
 
 		<!-- Modal content -->
@@ -104,25 +99,26 @@
 		<div class="row">
 			<div class="col-sm-3"></div>
 			<div class="col-sm-6" role="search">
+			<form ng-submit="callSearch()">
 				<div class="input-group">
 					<input type="text" class="form-control" id="searchText" ng-model="searchTextM" placeholder="Şiir, Kelime vb. Ara" />
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" ng-click="callSearch()">Ara</button>
 					</span>
 				</div>
-				
+			</form>
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
 
 		<div class="row">
-			<div ng-show="showResults" class="col-md-4" style="overflow-y: scroll; height:450px;">
+			<div ng-show="showResults" class="col-md-3" style="overflow-y: scroll; height:450px;">
 				<table class="table table-condensed">
 					<thead>
 						<tr>
 							<th></th>
 							<th>Şiir adı</th>
-							<th></th>
+							<!--<th></th>-->
 						</tr>
 					</thead>
 					<tbody>
@@ -133,70 +129,70 @@
 								</button>
 							</th>
 							<td>{{sonuc.name}}</td>
-							<td>
+							<!--<td>
 								<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
 									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 								</button>
-							</td>
+							</td>-->
 						</tr>
 					</tbody>
 				</table>	
 			</div>
-			<div class="col-md-4" ng-show="showResults">
+			<div class="col-md-6" ng-show="showResults">
 				<!--<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
 					<p id="siirinKendi">
 						
 					</p>
 				</div>-->
-				<h3><u><span>Görselleştirme seçenekleri</span></u></h3>
-				<div class="row">
+				<h3 style="text-align: center;"><u><span>Görselleştirme seçenekleri</span></u></h3>
+				<div class="row" style="text-align: center">
 					<div class="col-md-6" title="Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar">
-						<a href="#" ng-click = "getWordCloud()">
-							<span>Kelime Bulutu</span>
+						<a href="#" ng-click = "getGorsel(2)">
+							<span>Kelime Bulutu</span><br>
 							<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="100" width="100">
 						</a>
 					</div>
 					<div class="col-md-6">
-						<a href="#" ng-click = "getWordNet()">
-							<span>Kelime İlişkileri</span>
+						<a href="#" ng-click = "getGorsel(4)">
+							<span>Kelime İlişkileri</span><br>
 							<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png" height="100" width="100">
 						</a>
 					</div>
 				</div>
-				<div class="row" style="margin-top: 15px;">
+				<div class="row" style="margin-top: 15px;text-align: center;">
 					<div class="col-md-6">
-						<a href="#" ng-click = "getRandomLines()">
-							<span>Rastgele Çizgiler</span>
+						<a href="#" ng-click = "getGorsel(3)">
+							<span>Rastgele Çizgiler</span><br>
 							<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png" height="100" width="100">
 						</a>
 					</div>
 					<div class="col-md-6">
-						Gelecekk...
+						<a href="#" ng-click = "getGorsel(1)">
+							<span>Şiiri Oku</span><br>
+							<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg" height="100" width="100">
+						</a>
 					</div>
 				</div>
 
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div ng-show="showResults">
 					<span>Kelimenin Yıllara Göre Kullanımı : </span>
 					<br>
-					<img id="imgFrequency" src="#" width="304" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
-					<!--onmouseover = "this.width=608;this.height=1080;" 
-					onmouseout = "this.width=304;this.height=236" -->
+					<img id="imgFrequency" src="#" width="280" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
 					<br>
 					<span>Kelimenin Mekana Göre Kullanımı : </span>
 					<br>
-					<img id="imgFrequency2" src="#" width="304" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
+					<img id="imgFrequency2" src="#" width="280" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
 					<br>
 					<span>Kelimenin Kitapa Göre Kullanımı : </span>
 					<br>
-					<img id="imgFrequency3" src="#" width="304" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
+					<img id="imgFrequency3" src="#" width="280" height="150" lass="img-rounded" onclick= "showFrequencyModal()">
 				</div>
 			</div>	
 		</div>
-		<div class="row" id="gorselResult" style="margin-top: 15px; margin-left:25%;" ng-show="gorselSonucShow">
-			<img src="#" id="imgGorselResult" width="600" height="400">
-		</div>
 
 	</div>
+
 </div>
+

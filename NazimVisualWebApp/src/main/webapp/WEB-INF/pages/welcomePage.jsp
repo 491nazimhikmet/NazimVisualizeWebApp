@@ -18,6 +18,7 @@
 <script src="${pageContext.request.contextPath}/resources/CTRLs/siirAraCtrl.js"></script>
 <script src="${pageContext.request.contextPath}/resources/VisualWebAppCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>
 <title>Giriş yapıldı</title>
 <script type="text/javascript">
 	var showGiris = false;
@@ -32,14 +33,14 @@
 	    bottom: 0;
 	    font-size: -webkit-xxx-large;
 	    left: 50%;
-	    z-index: 3000;
+	    z-index: 15;
 	    display: none;
 	}
 
 	.topumArr{
 		position: fixed;
 	    font-size: -webkit-xxx-large;
-	    z-index: 3000;
+	    z-index: 15;
 	    left: 50%;
 	    display: none;
 	}
@@ -48,7 +49,13 @@
 </head>
 <body ng-app="myApp" ng-controller="anaSayfaCTRL">
 
-	<div class="container">
+	<div class="progress ng-hide" style="position:fixed; top:30%; left: 25%; width: 50%; position:center; " ng-show="showProgressBar">
+	    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+	     	İşlem yapılıyor lütfen bekleyiniz
+	    </div>
+	</div>
+
+	<div class="container" ng-show="!showProgressBar">
 		<%@ include file="header.jsp" %>
 
 		<div class="progress">
@@ -67,9 +74,14 @@
 			<div ng-show="showGirisSayfasi">
 				<%@ include file="girisSayfasi.html" %>
 			</div>
-			<div ng-show="showAramaSayfasi" ng-controller="siirAraCtrl">
-				<%@ include file="searchPoem.html" %>
-			</div>
+			<div ng-controller="siirAraCtrl">
+				<div ng-show="showAramaSayfasi" >
+					<%@ include file="searchPoem.html" %>
+				</div>
+				<div ng-show="showAramaSonucSayfasi">
+					<%@ include file="gorselSonuc.html" %>
+				</div>
+			<div>
 			<div class="bottomArrow">
 				<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true"></span>
 			</div>
