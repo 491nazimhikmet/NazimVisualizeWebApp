@@ -42,7 +42,7 @@ public class WordFrequencyGraph extends PApplet {
 		WordDao wordDao = (WordDao) context.getBean("WordDao");
 		int margin = 150;
 		float rectX = 10;
-		background(55,112,130);
+		background(220);//(55,112,130);
 		noStroke();
 
 		ArrayList<TermFreqYear> yearFreq;
@@ -57,6 +57,7 @@ public class WordFrequencyGraph extends PApplet {
 			for (int i = 0; i < yearFreq.size(); i++) {
 				TermFreqYear currentYear = yearFreq.get(i);
 				if (currentYear.getYear() == 0) {
+					fill(50);
 					textSize(textSize);
 					textAlign(LEFT, TOP);
 					textLeading(textSize); 
@@ -79,7 +80,7 @@ public class WordFrequencyGraph extends PApplet {
 				textSize(textSize);
 				text(currentYear.getFrequency(),xPosDataOne,height-margin-yPosDataOne);
 				
-				fill(159, 179, 186);
+				fill(50);
 				pushMatrix() ;
 				translate(xPosDataOne,height - margin);
 				rotate(-PI/2);
