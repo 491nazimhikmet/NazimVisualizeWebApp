@@ -98,12 +98,12 @@ public class GorselGetirController {
 		}
 		System.out.println("WordFrequencyGraphServlet");
 
-		WordFrequencyPlace embed2 = new WordFrequencyPlace(1920, 1080, searchText);
+		/*WordFrequencyPlace embed2 = new WordFrequencyPlace(1920, 1080, searchText);
 		embed2.init();
 		
 		while (!embed2.finished) {
 
-		}
+		}*/
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

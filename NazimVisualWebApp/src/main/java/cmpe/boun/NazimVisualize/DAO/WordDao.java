@@ -86,7 +86,10 @@ public class WordDao extends DBConnection{
 			        "where w.bookId = b.bookId "+
 			        "and t.workId = w.workId "+
 			    ") k "+
-			"group by location";
+			"group by location"+
+			 " order by location";
+		
+		//System.out.println(query);
 		return Extractors.extractTermFreqPlace(this.getStmt().executeQuery(query));
 	}
 	

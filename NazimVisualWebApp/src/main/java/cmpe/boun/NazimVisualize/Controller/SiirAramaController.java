@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 
+import cmpe.boun.NazimVisualize.DAO.BookDao;
 import cmpe.boun.NazimVisualize.DAO.WordDao;
 import cmpe.boun.NazimVisualize.DAO.WorkDao;
 import cmpe.boun.NazimVisualize.DAO.WorkLineDao;
+import cmpe.boun.NazimVisualize.Model.TermFreqBook;
+import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
@@ -78,7 +81,11 @@ public class SiirAramaController {
 
 		System.out.println("getWordFrequencyData "+ searchText);
 		
-		ArrayList<TermFreqYear> yearFreq = new ArrayList<TermFreqYear>(wordDao.getFreqOverYearsOfTerm(searchText));
+		ApplicationContext context2 = new ClassPathXmlApplicationContext("Spring-Module.xml");
+		
+		WordDao wordDao3 = (WordDao) context2.getBean("WordDao");
+		
+		ArrayList<TermFreqYear> yearFreq = new ArrayList<TermFreqYear>(wordDao3.getFreqOverYearsOfTerm(searchText));
 		
 		String json = new Gson().toJson(yearFreq);
 
@@ -87,4 +94,42 @@ public class SiirAramaController {
 		response.getWriter().write(json);
 
 	}
+	
+	
+	@RequestMapping(value = "/getWordFrequencyOverPlaceData", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWordFrequencyOverPlaceData(@ModelAttribute("searchText") String searchText, HttpServletResponse response)
+			throws Exception {
+
+		System.out.println("getWordFrequencyOverPlaceData "+ searchText);
+		
+		WordDao wordDao2 = (WordDao) context.getBean("WordDao");
+		
+		ArrayList<TermFreqPlace> placeFreq = new ArrayList<TermFreqPlace>(wordDao2.getFreqOverPlaceOfTerm(searchText));
+		
+		String json = new Gson().toJson(placeFreq);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
+	@RequestMapping(value = "/getWordFrequencyOverBookData", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWordFrequencyOverBookData(@ModelAttribute("searchText") String searchText, HttpServletResponse response)
+			throws Exception {
+
+		System.out.println("getWordFrequencyOverBookData "+ searchText);
+		
+		BookDao bookDao = (BookDao) context.getBean("BookDao");
+		
+		ArrayList<TermFreqBook> placeFreq = new ArrayList<TermFreqBook>(bookDao.getBookCounterOfWord(searchText));
+		
+		String json = new Gson().toJson(placeFreq);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
 }

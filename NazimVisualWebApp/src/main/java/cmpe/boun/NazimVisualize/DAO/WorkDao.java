@@ -12,7 +12,7 @@ import cmpe.boun.NazimVisualize.Model.WorkLine;
 
 public class WorkDao extends DBConnection{
 	
-private Connection conn;
+	private Connection conn;
 	
 	public DataSource dataSource;
 	
@@ -48,10 +48,12 @@ private Connection conn;
 	}
 	
 	public List<Work> getWorksByWordName(String search) throws Exception{
-		String query = "Select * from `work` where workId in( "+
+		String query = "Select w.workId, w.name, w.bookId, w.locationOfComp, w.pageNum,w.title, "+
+						"IF(w.year is null, b.Year,w.year) as year "+
+						"from `work` w inner join book b on w.bookId = b.bookId "+
+							"where workId in( "+
 							"Select distinct(workId) from workLine where lineId in ( "+
 								"SELECT distinct(`workLineId`) FROM `word` "
-								//+ "WHERE lower(text)like lower('%"+search+"%')))";
 								+ "WHERE lower(disambiguated)like lower('"+search+"')))";
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}

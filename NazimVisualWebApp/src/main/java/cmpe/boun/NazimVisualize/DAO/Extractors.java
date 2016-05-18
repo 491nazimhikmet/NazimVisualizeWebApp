@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cmpe.boun.NazimVisualize.Model.Book;
+import cmpe.boun.NazimVisualize.Model.TermFreqBook;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.User;
@@ -122,6 +123,7 @@ public class Extractors {
 			result.add(yearFreq);
 		}
 		
+		
 		return result;
 	}
 	
@@ -134,6 +136,21 @@ public class Extractors {
 			placeFreq.setFrequency(rs.getInt("frequency"));
 			
 			result.add(placeFreq);
+		}
+		
+		return result;
+	}
+	
+	public static List<TermFreqBook> extractTermFreqBook(ResultSet rs) throws SQLException{
+		List<TermFreqBook> result = new ArrayList<TermFreqBook>();
+		
+		while(rs.next()){
+			TermFreqBook bookFreq = new TermFreqBook();
+			bookFreq.setBookId(rs.getInt("bookId"));
+			bookFreq.setFrequency(rs.getInt("frequency"));
+			bookFreq.setBookName(rs.getString("name"));
+
+			result.add(bookFreq);
 		}
 		
 		return result;

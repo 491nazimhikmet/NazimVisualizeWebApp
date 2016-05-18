@@ -62,6 +62,14 @@
 		$("#myModal").hide();
 	}
 
+	function closeFreqPlaceModal(){
+		$("#freqPlaceModal").hide();
+	}
+	
+	function closeFreqBookModal(){
+		$("#freqBookModal").hide();
+	}
+
 
 	// When the user clicks anywhere outside of the modal, close it
 	window.onclick = function(event) {
@@ -91,6 +99,42 @@
 		</div>
 
 	</div>
+	<!-- Frequency PlaceModal -->
+	<div id="freqPlaceModal" class="modal" style="z-index: 1050;">
+
+
+		<!-- Modal content -->
+		<div class="modal-content" style="margin-top: 1%;">
+			<div class="modal-header">
+				<span class="close" onclick = "closeFreqPlaceModal()" >x</span>
+				<span>Kelimenin Mekanlara Göre Kullanımı :</span>
+			</div>
+			<div class="modal-body">
+				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
+				<canvas id="canvasFreqOverPlaceModal" width="100%"></canvas>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Frequency PlaceModal -->
+	<div id="freqBookModal" class="modal" style="z-index: 1050;">
+
+
+		<!-- Modal content -->
+		<div class="modal-content" style="margin-top: 1%;">
+			<div class="modal-header">
+				<span class="close" onclick = "closeFreqBookModal()" >x</span>
+				<span>Kelimenin Kitaba Göre Kullanımı :</span>
+			</div>
+			<div class="modal-body">
+				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
+				<canvas id="canvasFreqOverBookModal" width="100%"></canvas>
+			</div>
+		</div>
+
+	</div>
+
 	<div class="row">
 		<div class="row">
 			<div class="col-sm-3"></div>
@@ -132,12 +176,12 @@
 					<thead>
 						<tr>
 							<th></th>
-							<th>Şiir adı</th>
+							<th>Aranan Kelimenin Geçtiği Şiirleri</th>
 							<!--<th></th>-->
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="sonuc in aramaSonucList">
+						<tr ng-repeat="sonuc in aramaSonucList" ng-mouseover="highLightPlaceYear(sonuc,2)" ng-mouseleave="highLightPlaceYear(sonuc,3)">
 							<td>
 								<!--<button type="button"  ng-click="addToGorsellestirSiirList(sonuc)" class="btn btn-default" aria-label="Left Align">
 									<span id="sonucSymb{{sonuc.workID}}" class="glyphicon glyphicon-plus" style="color: green;" aria-hidden="true"></span>
@@ -167,13 +211,13 @@
 					<div class="col-md-6" title="Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar">
 						<a href="#" ng-click = "getGorsel(2)">
 							<span>Kelime Bulutu</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="100" width="100" onmouseover="this.width=120;this.height=120" onmouseout="this.width=100;this.height=100">
+							<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
 						</a>
 					</div>
 					<div class="col-md-6">
 						<a href="#" ng-click = "getGorsel(4)">
 							<span>Kelime İlişkileri</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png" height="100" width="100"onmouseover="this.width=120;this.height=120" onmouseout="this.width=100;this.height=100">
+							<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
 						</a>
 					</div>
 				</div>
@@ -181,13 +225,13 @@
 					<div class="col-md-6">
 						<a href="#" ng-click = "getGorsel(3)">
 							<span>Rastgele Çizgiler</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png" height="100" width="100"onmouseover="this.width=120;this.height=120" onmouseout="this.width=100;this.height=100">
+							<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
 						</a>
 					</div>
 					<div class="col-md-6">
 						<a href="#" ng-click = "getGorsel(1)">
 							<span>Şiiri Oku</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg" height="100" width="100"onmouseover="this.width=120;this.height=120" onmouseout="this.width=100;this.height=100">
+							<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
 						</a>
 					</div>
 				</div>
@@ -210,14 +254,21 @@
 <!--
 					<img id="imgFrequency" style="display:none;" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">
 -->
-					<br>
-					<span class="freqBaslik">Kelimenin Mekana Göre Kullanımı : </span>
-					<br>
-					<img id="imgFrequency2" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">
-					<br>
 					<span class="freqBaslik">Kelimenin Kitapa Göre Kullanımı : </span>
 					<br>
-					<img id="imgFrequency3" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">
+					<canvas id="canvasFreqOverBook" width="220" height="150" ng-mouseover="drawWordFreqOverBook(2)" ng-mouseleave="drawWordFreqOverBook(3)" ng-click= "showFrequencyBookModal()"></canvas>
+					<!--<img id="imgFrequency3" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->
+
+					<br>
+					
+					<span class="freqBaslik">Kelimenin Mekana Göre Kullanımı : </span>
+					<br>
+					<!--<img id="imgFrequency2" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->
+
+					<canvas id="canvasFreqOverPlace" width="220" height="150" ng-mouseover="drawWordFreqOverPlace(2)" ng-mouseleave="drawWordFreqOverPlace(3)" ng-click= "showFrequencyPlaceModal()"></canvas>
+
+					<br>
+					
 				</div>
 			</div>	
 		</div>

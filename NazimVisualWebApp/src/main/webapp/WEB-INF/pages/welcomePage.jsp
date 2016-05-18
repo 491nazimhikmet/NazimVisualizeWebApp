@@ -81,7 +81,7 @@
 				<div ng-show="showAramaSonucSayfasi">
 					<%@ include file="gorselSonuc.html" %>
 				</div>
-			<div>
+			</div>
 			<div class="bottomArrow">
 				<span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true"></span>
 			</div>
