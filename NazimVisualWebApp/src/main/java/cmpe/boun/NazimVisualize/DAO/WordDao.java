@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.Word;
+import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
 
 
 public class WordDao extends DBConnection{
@@ -34,6 +35,14 @@ public class WordDao extends DBConnection{
 	public List<Word> getWordsOfAWork(Integer workId) throws SQLException{
 		String query = "SELECT * FROM Word WHERE workLineId in(select lineId from workLine where workId = "+Integer.toString(workId)+" )";
 		return Extractors.extractWord(this.getStmt().executeQuery(query));
+	}
+	
+	public List<WordWithParsedForm> getWordsWithParsedForm(int workID) throws SQLException{
+		String query = "SELECT w.*,wp.parsedForm FROM word w,wordParseForms wp WHERE w.wordId = wp.wordId and wp.probOrder = 1 and workLineId IN (SELECT lineId from workline WHERE WorkId ="+Integer.toString(workID)+")";
+		//dbde workID de tutalım
+		List<WordWithParsedForm> returnlist = Extractors.extractWordsWithParsedForm(this.getStmt().executeQuery(query));
+		 closeConnection();
+		 return returnlist; 
 	}
 	
 	/**

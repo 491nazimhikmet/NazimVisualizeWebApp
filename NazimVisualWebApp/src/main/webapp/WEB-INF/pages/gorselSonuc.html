@@ -1,11 +1,33 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<div class="row" id="gorselResult" style="/*margin-top: 15px; margin-left:25%;*/" ng-show="!showSiir">
-			<img src="#" id="imgGorselResult" width="600" height="400">
-</div>
-<div class="row" ng-show="showSiir">
-	<div class="scroll" style="height:500px;">
+<div style="margin-top:15%;left:0;position:fixed" ng-show="!showSiirYandan">
+		<button type="button" class="btn btn-info " ng-click="showSiirYandan = !showSiirYandan" > 
+		  <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+		</button>
+	</div>
+
+<div style="margin-top:0%;left:10px; z-index:300; float:left; position:fixed;">
+	<div class="scroll" style="height:500px;float:left;"  ng-show="showSiirYandan">
 		<p id="siirinKendi">
 			
 		</p>
 	</div>
+	<div style="margin-top:70%;float:left;position:static" ng-show="showSiirYandan">
+		<button type="button" class="btn btn-info " ng-click="showSiirYandan = !showSiirYandan" > 
+		  <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
+		</button>
+	</div>
+</div>
+
+
+<div class="col-md-3">
+</div>
+
+<div class="col-md-9" style="text-align:center;">
+	<div class="row">
+		<h5><span class="label label-info">Seçili Şiir:</span>  {{seciliSiirName}}</h5>
+	</div>
+	<div class="row" id="gorselResult" style="/*margin-top: 15px; margin-left:25%;*/">
+				<img src="#" id="imgGorselResult" width="600" height="400">
+	</div>
+	
 </div>

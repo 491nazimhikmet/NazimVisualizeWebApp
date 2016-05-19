@@ -6,7 +6,12 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	$scope.seciliSiirYear = 0;
 	$scope.seciliSiirPlace = "";
 	$scope.seciliSiirBook = 0;
+	$scope.seciliSiirName = "";
 	$scope.gorselSonucShow = false;
+	$scope.highlightFrequencies = false;
+	$scope.highlightSiirYear = 0;
+	$scope.highlightSiirBook = 0;
+	$scope.highlightSiirPlace = "";
 	//$scope.showProgressBar = false;
 
 	$scope.baseImagePathUrl = appConfig.baseImagePathUrl;
@@ -16,6 +21,13 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 		$scope.seciliSiir = work.workID;
 
+		$scope.seciliSiirYear = work.year;
+
+		$scope.seciliSiirPlace = work.locationOfComp;
+
+		$scope.seciliSiirBook = work.bookID;
+
+		$scope.seciliSiirName = work.name;
 
 		
 
@@ -34,11 +46,24 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 	$scope.highLightPlaceYear = function(work,type){
 
-		$scope.seciliSiirYear = work.year;
+		$scope.highlightSiirYear = work.year;
+		$scope.highlightSiirBook = work.bookID;
+		$scope.highlightSiirPlace = work.locationOfComp;
+
+		if(type == 2){//mouse over
+			$scope.highlightFrequencies = true;
+		}else if(type == 3){//mouse leave
+			$scope.highlightSiirYear = 0;
+			$scope.highlightSiirBook = 0;
+			$scope.highlightSiirPlace = "";
+			$scope.highlightFrequencies = false;
+		}
+
+		/*$scope.seciliSiirYear = work.year;
 
 		$scope.seciliSiirPlace = work.locationOfComp;
 
-		$scope.seciliSiirBook = work.bookID;
+		$scope.seciliSiirBook = work.bookID;*/
 
 		$scope.drawWordFreqOverYear(type);
 		$scope.drawWordFreqOverPlace(type);
@@ -55,6 +80,7 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				loadEnded();	
     			return;
     		}
+    		$scope.showGorselGeriDon = false;
     		$scope.aramaSonucList = response;
     		$scope.showResults = true;
 
@@ -270,7 +296,11 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 					
 					processing.rectMode(processing.CORNER);
 
-					if($scope.seciliSiirBook != 0  && $scope.seciliSiirBook == currentBook.bookId){
+					if($scope.highlightFrequencies == true && $scope.highlightSiirBook != 0  
+						&& $scope.highlightSiirBook == currentBook.bookId){
+						processing.fill(222,0,0)//(55,112,130);
+						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
+					}else if($scope.highlightFrequencies == false && $scope.seciliSiirBook != 0  && $scope.seciliSiirBook == currentBook.bookId){
 						processing.fill(222,0,0)//(55,112,130);
 						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
 					}else{
@@ -370,7 +400,12 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 					
 					processing.rectMode(processing.CORNER);
 
-					if($scope.seciliSiirPlace != ""  && $scope.seciliSiirPlace.toLowerCase() == currentPlace.place.toLowerCase()){
+					if($scope.highlightFrequencies == true && $scope.highlightSiirPlace != 0  
+						&& $scope.highlightSiirPlace.toLowerCase() == currentPlace.place.toLowerCase()){
+						processing.fill(222,0,0)//(55,112,130);
+						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
+					}else if($scope.highlightFrequencies == false && $scope.seciliSiirPlace != ""  
+						&& $scope.seciliSiirPlace.toLowerCase() == currentPlace.place.toLowerCase()){
 						processing.fill(222,0,0)//(55,112,130);
 						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
 					}else{
@@ -480,7 +515,11 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 					
 					processing.rectMode(processing.CORNER);
 
-					if($scope.seciliSiirYear > 0  && $scope.seciliSiirYear == currentYear.year){
+					if($scope.highlightFrequencies == true && $scope.highlightSiirYear != 0  
+						&& $scope.highlightSiirYear == currentYear.year){
+						processing.fill(222,0,0)//(55,112,130);
+						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
+					}else if($scope.highlightFrequencies == false && $scope.seciliSiirYear > 0  && $scope.seciliSiirYear == currentYear.year){
 						processing.fill(222,0,0)//(55,112,130);
 						processing.rect(xPosDataOne, height - margin, rectX * 2, -1 * yPosDataOne);
 					}else{
@@ -532,10 +571,12 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		if($scope.seciliSiir <= 0 ){
 			bootbox.alert("Lütfen bir şiir seçiniz");
 		}else{
-			$scope.$parent.showAramaSonuc = true;
-			$scope.$parent.showSection(3);
+			//$scope.$parent.showAramaSonuc = true;
+			//$scope.$parent.showSection(3);
 			$scope.showSiir = false;
 			$scope.gorselSonucShow = false;
+			$scope.showGorselGeriDon = false;
+
 			if(type == 1){
 				$scope.siiriOku();
 			}else if(type == 2){
@@ -543,23 +584,24 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 			}else if(type == 3){
 				$scope.getRandomLines();
 			}else if(type == 4){
-				//wordNet
+				$scope.getBarkodOfSiir();
 			}else{
-				$scope.$parent.showAramaSonuc = false;
-				$scope.$parent.showSection(2);
+				//$scope.$parent.showAramaSonuc = false;
+				//$scope.$parent.showSection(2);
 			}
+			$scope.siiriOku();
 		}
 	}
 
 	$scope.siiriOku = function(){
-		loadProgress();
+		//loadProgress();
 		
 		BaseAPI.callServlet('getSiir',{siirId:$scope.seciliSiir+""}).then(function(response) {
 			$scope.showSiir = true;
 			$scope.gorselSonucShow = true;
 			console.log(response);
 			$('#siirinKendi').html(response); 
-			loadEnded();
+			//loadEnded();
         });
 	}
 
@@ -596,6 +638,28 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
             $('#imgGorselResult').attr('src',$scope.baseImagePathUrl+responseText); 
             $('#imgGorselResult')[0].src =$scope.baseImagePathUrl+responseText; 
         	$("#imgGorselResult").show(); 
+
+			loadEnded();
+        });
+	}
+
+	$scope.getBarkodOfSiir = function(){
+		loadProgress();
+		BaseAPI.callServlet('getWorkLinesOfWork',{siirId:$scope.seciliSiir+""}).then(function(siirLines) {
+            
+			console.log(siirLines);
+
+			loadEnded();
+        });
+        BaseAPI.callServlet('getWordsOfWorkWithParsedForm',{siirId:$scope.seciliSiir+""}).then(function(parsedWords) {
+            
+			console.log(parsedWords);
+
+			loadEnded();
+        });
+        BaseAPI.callServlet('getAffectiveResultsOfWork',{siirId:$scope.seciliSiir+""}).then(function(affectiveResults) {
+            
+			console.log(affectiveResults);
 
 			loadEnded();
         });

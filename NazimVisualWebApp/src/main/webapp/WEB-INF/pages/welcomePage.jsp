@@ -55,7 +55,7 @@
 	    </div>
 	</div>
 
-	<div class="container" ng-show="!showProgressBar">
+	<div class="container" ng-show="!showProgressBar" style="padding:0;">
 		<%@ include file="header.jsp" %>
 
 		<div class="progress">
@@ -70,16 +70,20 @@
 			<div class="topumArr">
 				<span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>
 			</div>
+			
 			<%@ include file="signinModal.html" %>
-			<div ng-show="showGirisSayfasi">
-				<%@ include file="girisSayfasi.html" %>
-			</div>
-			<div ng-controller="siirAraCtrl">
-				<div ng-show="showAramaSayfasi" >
-					<%@ include file="searchPoem.html" %>
+			
+			<div id="mainModal">
+				<div ng-show="showGirisSayfasi">
+					<%@ include file="girisSayfasi.html" %>
 				</div>
-				<div ng-show="showAramaSonucSayfasi">
-					<%@ include file="gorselSonuc.html" %>
+				<div ng-controller="siirAraCtrl">
+					<div ng-show="showAramaSayfasi" >
+						<%@ include file="searchPoem.html" %>
+					</div>
+					<!--<div ng-show="showAramaSonucSayfasi">
+						<%@ include file="gorselSonuc.html" %>
+					</div>-->
 				</div>
 			</div>
 			<div class="bottomArrow">

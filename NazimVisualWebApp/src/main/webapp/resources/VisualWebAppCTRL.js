@@ -24,6 +24,13 @@ function showSignUp(){
 	$('#mainModal').hide();
 };
 
+
+function showMainModal(){
+	$('#siginModal').hide();
+	$('#sigUpModal').hide();
+	$('#mainModal').show();
+};
+
 function getPng(){
 	$.get('randomLineGorselleriServlet?siirId=6161',function(responseText) {
 			setTimeout(function(){ //alert("Hello");

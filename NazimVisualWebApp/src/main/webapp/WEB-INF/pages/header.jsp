@@ -37,11 +37,11 @@
 				      	Arama
 				    </a>
 		    	</li>
-		    	<li>
+		    	<!--<li>
 		    		<a class="navbar-brand" href="#arama" ng-show="showAramaSonuc" ng-click="showSection(3)">
 				      	Arama Görselleri
 				    </a>
-		    	</li>
+		    	</li>-->
 		    	<li>
 		    		<a class="navbar-brand" href="#">
 				      	Detaylı Arama
@@ -57,6 +57,8 @@
 		    	<div class="btn-group" role="group">
 		    		<button type="button" class="btn btn-info navbar-btn" onclick="showSignIn()">Giriş Yap</button>
   					<button type="button" class="btn btn-default navbar-btn" onclick="showSignUp()">Kaydol</button>
+  					<!--<button type="button" class="btn btn-info navbar-btn" ng-click="showSignInModal()">Giriş Yap</button>
+  					<button type="button" class="btn btn-default navbar-btn" ng-click="showSignUpModal()">Kaydol</button>-->
 		    	</div>
 		    </ul>
 

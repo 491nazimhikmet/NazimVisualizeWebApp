@@ -137,13 +137,22 @@
 
 	<div class="row">
 		<div class="row">
-			<div class="col-sm-3"></div>
+			<div class="col-sm-3">
+				<button type="button" class="btn btn-warning btn-sm" ng-show="gorselSonucShow" ng-click="gorselSonucShow = false; showGorselGeriDon=true">
+				  <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
+				  Sonuçlara Dön
+				</button>
+				<button type="button" class="btn btn-warning btn-sm" ng-show="!gorselSonucShow && showResults && showGorselGeriDon" ng-click="gorselSonucShow = true">
+				  Görsele Dön
+				  <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+				</button>
+			</div>
 			<div class="col-sm-6" role="search">
 			<form ng-submit="callSearch()">
 				<div class="input-group">
-					<input type="text" class="form-control" id="searchText" ng-model="searchTextM" placeholder="Şiir, Kelime vb. Ara" />
+					<input type="text" class="form-control" id="searchText" ng-model="searchTextM" ng-disabled="gorselSonucShow" placeholder="Şiir, Kelime vb. Ara" />
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" ng-click="callSearch()">Ara</button>
+						<button class="btn btn-default" type="button" ng-click="callSearch()" ng-disabled="gorselSonucShow">Ara</button>
 					</span>
 				</div>
 			</form>
@@ -171,71 +180,129 @@
 		</style>
 
 		<div class="row">
-			<div ng-show="showResults" class="col-md-2 scroll">
-				<table class="table table-condensed" style="font-size:small;">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Aranan Kelimenin Geçtiği Şiirleri</th>
-							<!--<th></th>-->
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="sonuc in aramaSonucList" ng-mouseover="highLightPlaceYear(sonuc,2)" ng-mouseleave="highLightPlaceYear(sonuc,3)">
-							<td>
-								<!--<button type="button"  ng-click="addToGorsellestirSiirList(sonuc)" class="btn btn-default" aria-label="Left Align">
-									<span id="sonucSymb{{sonuc.workID}}" class="glyphicon glyphicon-plus" style="color: green;" aria-hidden="true"></span>
-								</button>-->
-									<label>
-										 <input type="radio" ng-click="addToGorsellestirSiirList(sonuc)" name="optRadio">
-									</label>
-							</td>
-							<td>{{sonuc.name}}</td>
-							<!--<td>
-								<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
-									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-								</button>
-							</td>-->
-						</tr>
-					</tbody>
-				</table>	
-			</div>
-			<div class="col-md-7" ng-show="showResults">
-				<!--<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
-					<p id="siirinKendi">
-						
-					</p>
-				</div>-->
-				<h3 style="text-align: center;"><u><span>Görselleştirme seçenekleri</span></u></h3>
-				<div class="row" style="text-align: center">
-					<div class="col-md-6" title="Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar">
-						<a href="#" ng-click = "getGorsel(2)">
-							<span>Kelime Bulutu</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-						</a>
-					</div>
-					<div class="col-md-6">
-						<a href="#" ng-click = "getGorsel(4)">
-							<span>Kelime İlişkileri</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-						</a>
-					</div>
+			<div class="col-md-9" ng-show="!gorselSonucShow">
+				<div ng-show="showResults" class="col-md-3 scroll">
+					<table class="table table-condensed" style="font-size:small;">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Aranan Kelimenin Geçtiği Şiirleri</th>
+								<!--<th></th>-->
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="sonuc in aramaSonucList" ng-mouseover="highLightPlaceYear(sonuc,2)" ng-mouseleave="highLightPlaceYear(sonuc,3)">
+								<td>
+									<!--<button type="button"  ng-click="addToGorsellestirSiirList(sonuc)" class="btn btn-default" aria-label="Left Align">
+										<span id="sonucSymb{{sonuc.workID}}" class="glyphicon glyphicon-plus" style="color: green;" aria-hidden="true"></span>
+									</button>-->
+										<label>
+											 <input type="radio" ng-click="addToGorsellestirSiirList(sonuc)" name="optRadio">
+										</label>
+								</td>
+								<td>{{sonuc.name}}</td>
+								<!--<td>
+									<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
+										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									</button>
+								</td>-->
+							</tr>
+						</tbody>
+					</table>	
 				</div>
-				<div class="row" style="margin-top: 15px;text-align: center;">
-					<div class="col-md-6">
-						<a href="#" ng-click = "getGorsel(3)">
-							<span>Rastgele Çizgiler</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-						</a>
-					</div>
-					<div class="col-md-6">
-						<a href="#" ng-click = "getGorsel(1)">
-							<span>Şiiri Oku</span><br>
-							<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-						</a>
-					</div>
-				</div>
+				<div class="col-md-9" ng-show="showResults">
+					<!--<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
+						<p id="siirinKendi">
+							
+						</p>
+					</div>-->
+					<h3 style="text-align: center;"><u><span>Görselleştirme seçenekleri</span></u></h3>
+					<div class="row" style="text-align: center">
+						<div class="col-md-6" > <!-- title="Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar">-->
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(2)">
+									<span>Kelime Bulutu</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+								</a>
 
+							<span class="gorselInfoLbl">Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar</span>
+							</div>
+						</div>
+						<style type="text/css">
+							
+
+							/* Tooltip text */
+							.gorselInfo .gorselInfoLbl {
+							    visibility: hidden;
+							    width: 200px;
+							    background-color: #555;
+							    color: #fff;
+							    text-align: center;
+							    padding: 5px 0;
+							    border-radius: 6px;
+
+							    /* Position the tooltip text */
+							    position: absolute;
+							    z-index: 1;
+							    bottom: 50%;
+							    left: 50%;
+							    margin-left: -100px;
+
+							    /* Fade in tooltip */
+							    opacity: 0;
+							    transition: opacity 1s;
+							}
+
+							/* Tooltip arrow */
+							.gorselInfo .gorselInfoLbl::after {
+							    content: "";
+							    position: absolute;
+							    top: 100%;
+							    left: 50%;
+							    margin-left: -5px;
+							    border-width: 5px;
+							    border-style: solid;
+							    border-color: #555 transparent transparent transparent;
+							}
+
+							/* Show the tooltip text when you mouse over the tooltip container */
+							.gorselInfo:hover .gorselInfoLbl {
+							    visibility: visible;
+							    opacity: 1;
+							}
+						</style>
+						<div class="col-md-6">
+							<a href="#" ng-click = "getGorsel(4)">
+								<span>Kelime İlişkileri</span><br>
+								<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+							</a>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 15px;text-align: center;">
+						<!--<div class="col-md-6">
+							<a href="#" ng-click = "getGorsel(3)">
+								<span>Rastgele Çizgiler</span><br>
+								<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+							</a>
+						</div>-->
+						<div class="col-md-6">
+							<a href="#" ng-click = "getGorsel(4)">
+								<span>Barkode</span><br>
+								<img src="${pageContext.request.contextPath}/resources/images/barkod.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+							</a>
+						</div>
+						<div class="col-md-6">
+							<a href="#" ng-click = "getGorsel(1)">
+								<span>Şiiri Oku</span><br>
+								<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-md-9" ng-show="gorselSonucShow">
+				<%@ include file="gorselSonuc.html" %>
 			</div>
 			<style type="text/css">
 				.freqBaslik{
@@ -260,7 +327,7 @@
 					<!--<img id="imgFrequency3" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->
 
 					<br>
-					
+
 					<span class="freqBaslik">Kelimenin Mekana Göre Kullanımı : </span>
 					<br>
 					<!--<img id="imgFrequency2" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->

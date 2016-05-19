@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 
+import cmpe.boun.NazimVisualize.DAO.AffectiveDao;
 import cmpe.boun.NazimVisualize.DAO.BookDao;
 import cmpe.boun.NazimVisualize.DAO.WordDao;
 import cmpe.boun.NazimVisualize.DAO.WorkDao;
 import cmpe.boun.NazimVisualize.DAO.WorkLineDao;
+import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 import cmpe.boun.NazimVisualize.Model.TermFreqBook;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
+import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
 
@@ -125,6 +128,70 @@ public class SiirAramaController {
 		ArrayList<TermFreqBook> placeFreq = new ArrayList<TermFreqBook>(bookDao.getBookCounterOfWord(searchText));
 		
 		String json = new Gson().toJson(placeFreq);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
+	@RequestMapping(value = "/getWorkLinesOfWork", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWorkLinesOfWork(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+			throws Exception {
+
+		int workID = Integer.parseInt(siirId);
+		
+		System.out.println("getWorkLinesOfWork "+ siirId);
+		
+		ApplicationContext context2 = new ClassPathXmlApplicationContext("Spring-Module.xml");
+		WorkLineDao workLineDao2 = (WorkLineDao) context2.getBean("WorkLineDao");
+		
+		ArrayList<WorkLine> workLines = new ArrayList<WorkLine>(workLineDao2.getWorkLineOfAWork(workID));
+		
+		String json = new Gson().toJson(workLines);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
+	@RequestMapping(value = "/getWordsOfWorkWithParsedForm", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWordsOfWorkWithParsedForm(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+			throws Exception {
+
+		int workID = Integer.parseInt(siirId);
+		
+		System.out.println("getWordsOfWorkWithParsedForm "+ siirId);
+		
+		ApplicationContext context3 = new ClassPathXmlApplicationContext("Spring-Module.xml");
+		
+		WordDao wordDao4 = (WordDao) context3.getBean("WordDao");
+		
+		ArrayList<WordWithParsedForm> workLines = new ArrayList<WordWithParsedForm>(wordDao4.getWordsWithParsedForm(workID));
+		
+		String json = new Gson().toJson(workLines);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+	
+	@RequestMapping(value = "/getAffectiveResultsOfWork", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getAffectiveResultsOfWork(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+			throws Exception {
+
+		int workID = Integer.parseInt(siirId);
+		
+		System.out.println("getAffectiveResultsOfWork "+ siirId);
+		
+		
+		AffectiveDao affectiveDao = (AffectiveDao) context.getBean("AffectiveDao");
+		
+		ArrayList<AffectiveResult> workLines = new ArrayList<AffectiveResult>(affectiveDao.getResultsByWorkId(workID));
+		
+		String json = new Gson().toJson(workLines);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

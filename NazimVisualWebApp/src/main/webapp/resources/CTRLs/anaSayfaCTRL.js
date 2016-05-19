@@ -3,6 +3,8 @@ app.controller('anaSayfaCTRL', function($scope) {
 	$scope.showAramaSayfasi = false;
 
 	$scope.showSection = function (secNum){
+		showMainModal();
+		$scope.showSignIn = false;
 		if(secNum == 1){
 			$scope.showGirisSayfasi = true;
 			$scope.showAramaSayfasi = false;
@@ -27,5 +29,14 @@ app.controller('anaSayfaCTRL', function($scope) {
 
 	$scope.showLoaded= function(){
 		$scope.showProgressBar = false;
+	}
+
+
+	$scope.showSignInModal = function(){
+		$scope.showSignIn = true;
+	}
+
+	$scope.showSignUpModal = function(){
+		$scope.showSignUp = true;
 	}
 });

@@ -5,12 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 import cmpe.boun.NazimVisualize.Model.Book;
 import cmpe.boun.NazimVisualize.Model.TermFreqBook;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.User;
 import cmpe.boun.NazimVisualize.Model.Word;
+import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
 
@@ -155,4 +157,46 @@ public class Extractors {
 		
 		return result;
 	}
+	
+	public static List<WordWithParsedForm> extractWordsWithParsedForm(ResultSet rs) throws SQLException{
+		List<WordWithParsedForm> result = new ArrayList<WordWithParsedForm>();
+		
+		while(rs.next()){
+			WordWithParsedForm word = new WordWithParsedForm();
+			word.setBold(rs.getBoolean("isBold"));
+			word.setFont(rs.getString("font"));
+			word.setItalic(rs.getBoolean("isItalic"));
+			word.setText(rs.getString("text"));
+			word.setWordFinish(rs.getDouble("wordFinish"));
+			word.setWordID(rs.getInt("wordId"));
+			word.setWordStart(rs.getDouble("wordStart"));
+			word.setWorkLineID(rs.getInt("workLineId"));
+			word.setParsedForm(rs.getString("parsedForm"));
+				
+			result.add(word);
+		}
+		
+		return result;
+	}
+	
+	public static List<AffectiveResult> extractAffectiveResults(ResultSet rs) throws SQLException{
+		
+		List<AffectiveResult> result = new ArrayList<AffectiveResult>();
+		
+		while(rs.next()){
+			AffectiveResult affRes = new AffectiveResult();
+			
+			affRes.setId(rs.getInt("textId"));
+			affRes.setType(rs.getInt("type"));
+			affRes.setText(rs.getString("text"));
+			affRes.setArousal(rs.getString("arousal"));
+			affRes.setDominance(rs.getString("dominance"));
+			affRes.setValence(rs.getString("valence"));
+			
+			result.add(affRes);
+		}
+		
+		return result;
+	}
+	
 }

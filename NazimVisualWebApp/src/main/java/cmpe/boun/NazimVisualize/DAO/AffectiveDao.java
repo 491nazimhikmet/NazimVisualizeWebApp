@@ -7,10 +7,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import cmpe.boun.NazimVisualize.Model.WorkLine;
+import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 
-public class WorkLineDao extends DBConnection{
-
+public class AffectiveDao extends DBConnection{
 	private Connection conn;
 	
 	public DataSource dataSource;
@@ -23,10 +22,12 @@ public class WorkLineDao extends DBConnection{
 		stmt = conn.createStatement();
 	}
 	
-	public List<WorkLine> getWorkLineOfAWork(int workID) throws SQLException{
-		String query = "SELECT * FROM WorkLine WHERE workId = "+Integer.toString(workID);
-		System.out.println(query);
-		return Extractors.extractWorkLine(this.getStmt().executeQuery(query));
+	public List<AffectiveResult> getResultsByWorkId(int workID) throws SQLException{
+		String query="SELECT * FROM `affectiveresults` WHERE `type` = 1 and textId in(select lineId from workLine where workId ="+Integer.toString(workID)+" )order by textId";
+
+		List<AffectiveResult> returnlist = Extractors.extractAffectiveResults(this.getStmt().executeQuery(query));
+		
+		return returnlist; 
 	}
 	
 	public Statement getStmt() {
