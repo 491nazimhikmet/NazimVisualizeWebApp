@@ -47,7 +47,25 @@ public class SiirAramaController {
 		//String searchText = data;
 		System.out.println("aranan kelime  : "+searchText);
 		
-		List<Work> workSonuclar = workdao.getWorksByWordName(searchText);
+		String search = "";
+		
+		if(searchText.startsWith("{") && searchText.endsWith("}")){
+			searchText = searchText.substring(1, searchText.length()-1);
+			
+			String[] parts = searchText.split(",");
+			
+			for(int i =0 ; i< parts.length; i++){
+				if(i != parts.length-1){
+					search += " lower('"+ parts[i] + "') , "; 
+				}else{
+					search += " lower('"+ parts[i] + "')";
+				}
+			}
+		}else{
+			search = " lower('"+ searchText + "')";
+		}
+		
+		List<Work> workSonuclar = workdao.getWorksByWordName(search);
 
 		String json = new Gson().toJson(workSonuclar);
 
@@ -90,6 +108,8 @@ public class SiirAramaController {
 		
 		ArrayList<TermFreqYear> yearFreq = new ArrayList<TermFreqYear>(wordDao3.getFreqOverYearsOfTerm(searchText));
 		
+		wordDao3.closeConnection();
+		
 		String json = new Gson().toJson(yearFreq);
 
 		response.setContentType("application/json");
@@ -127,6 +147,8 @@ public class SiirAramaController {
 		
 		ArrayList<TermFreqBook> placeFreq = new ArrayList<TermFreqBook>(bookDao.getBookCounterOfWord(searchText));
 		
+		bookDao.closeConnection();
+		
 		String json = new Gson().toJson(placeFreq);
 
 		response.setContentType("application/json");
@@ -148,6 +170,7 @@ public class SiirAramaController {
 		
 		ArrayList<WorkLine> workLines = new ArrayList<WorkLine>(workLineDao2.getWorkLineOfAWork(workID));
 		
+		workLineDao2.closeConnection();
 		String json = new Gson().toJson(workLines);
 
 		response.setContentType("application/json");
@@ -156,47 +179,7 @@ public class SiirAramaController {
 
 	}
 	
-	@RequestMapping(value = "/getWordsOfWorkWithParsedForm", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public void getWordsOfWorkWithParsedForm(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
-			throws Exception {
-
-		int workID = Integer.parseInt(siirId);
-		
-		System.out.println("getWordsOfWorkWithParsedForm "+ siirId);
-		
-		ApplicationContext context3 = new ClassPathXmlApplicationContext("Spring-Module.xml");
-		
-		WordDao wordDao4 = (WordDao) context3.getBean("WordDao");
-		
-		ArrayList<WordWithParsedForm> workLines = new ArrayList<WordWithParsedForm>(wordDao4.getWordsWithParsedForm(workID));
-		
-		String json = new Gson().toJson(workLines);
-
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
-
-	}
 	
-	@RequestMapping(value = "/getAffectiveResultsOfWork", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public void getAffectiveResultsOfWork(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
-			throws Exception {
 
-		int workID = Integer.parseInt(siirId);
-		
-		System.out.println("getAffectiveResultsOfWork "+ siirId);
-		
-		
-		AffectiveDao affectiveDao = (AffectiveDao) context.getBean("AffectiveDao");
-		
-		ArrayList<AffectiveResult> workLines = new ArrayList<AffectiveResult>(affectiveDao.getResultsByWorkId(workID));
-		
-		String json = new Gson().toJson(workLines);
-
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
-
-	}
 	
 }

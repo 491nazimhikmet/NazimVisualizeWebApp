@@ -49,12 +49,20 @@ public class WorkDao extends DBConnection{
 	
 	public List<Work> getWorksByWordName(String search) throws Exception{
 		String query = "Select w.workId, w.name, w.bookId, w.locationOfComp, w.pageNum,w.title, "+
-						"IF(w.year is null, b.Year,w.year) as year "+
-						"from `work` w inner join book b on w.bookId = b.bookId "+
-							"where workId in( "+
-							"Select distinct(workId) from workLine where lineId in ( "+
-								"SELECT distinct(`workLineId`) FROM `word` "
-								+ "WHERE lower(disambiguated)like lower('"+search+"')))";
+				"						IF(w.year is null, b.Year,w.year) as year,ws.cnt"+
+				"						from `work` w inner join book b on w.bookId = b.bookId ,"+
+				"							 ( "+
+				"							Select wl.workId, count(a.cnt) as cnt from workLine wl,"+
+				"                                ( "+
+				"								SELECT workLineId, count(*) as cnt FROM `word` "+
+				"								 WHERE lower(disambiguated) in ("+search+")"+
+				"                                 group by workLineId"+
+				"                              	) a"+
+				"                                where wl.lineId = a.workLineId"+
+				"                                group by wl.workId"+
+				"                             ) ws"+
+				"                             where w.workId = ws.workId"+
+				"                             order by ws.cnt desc" ;
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}
 	
@@ -62,6 +70,27 @@ public class WorkDao extends DBConnection{
 		String query = "SELECT * FROM Work";
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}
+	
+	public List<Integer> getAllYears() throws SQLException{
+		String query = "select distinct(a.year) from"
+					+ " (SELECT distinct(year) FROM `work` "
+					+ " UNION"
+					+ " SELECT distinct(year) FROM `book`) a "
+					+ " WHERE a.year > 0"
+					+ " order by a.year";
+		return Extractors.extractYears(this.getStmt().executeQuery(query));
+	}
+	
+	public List<String> getAllPlaces() throws SQLException{
+		String query = "select distinct(a.location) from "
+				+ " (SELECT distinct(locationOfComp) as location FROM `work` "
+				+ " UNION "
+				+ " SELECT distinct(location) as location FROM `book`) a "
+				+ " WHERE location != '' "
+				+ " order by a.location";
+		return Extractors.extractLocations(this.getStmt().executeQuery(query));
+	}
+
 	
 	public Statement getStmt() {
 		return stmt;

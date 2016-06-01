@@ -7,12 +7,14 @@ import java.util.List;
 
 import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 import cmpe.boun.NazimVisualize.Model.Book;
+import cmpe.boun.NazimVisualize.Model.PlaceWordLocation;
 import cmpe.boun.NazimVisualize.Model.TermFreqBook;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.User;
 import cmpe.boun.NazimVisualize.Model.Word;
 import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
+import cmpe.boun.NazimVisualize.Model.WordYeardFreq;
 import cmpe.boun.NazimVisualize.Model.Work;
 import cmpe.boun.NazimVisualize.Model.WorkLine;
 
@@ -143,6 +145,36 @@ public class Extractors {
 		return result;
 	}
 	
+	public static List<PlaceWordLocation> extractWordWithFreqPlace(ResultSet rs) throws SQLException{
+		List<PlaceWordLocation> result = new ArrayList<PlaceWordLocation>();
+		
+		while(rs.next()){
+			PlaceWordLocation placeFreq = new PlaceWordLocation();
+			placeFreq.setPlace(rs.getString("location"));
+			placeFreq.setFrequency(rs.getInt("frequency"));
+			placeFreq.setWord(rs.getString("disambiguated"));
+			
+			result.add(placeFreq);
+		}
+		
+		return result;
+	}
+	
+	public static List<WordYeardFreq> extractWordWithFreqYear(ResultSet rs) throws SQLException{
+		List<WordYeardFreq> result = new ArrayList<WordYeardFreq>();
+		
+		while(rs.next()){
+			WordYeardFreq placeFreq = new WordYeardFreq();
+			placeFreq.setYear(rs.getInt("year"));
+			placeFreq.setFrequency(rs.getInt("frequency"));
+			placeFreq.setWord(rs.getString("disambiguated"));
+			
+			result.add(placeFreq);
+		}
+		
+		return result;
+	}
+	
 	public static List<TermFreqBook> extractTermFreqBook(ResultSet rs) throws SQLException{
 		List<TermFreqBook> result = new ArrayList<TermFreqBook>();
 		
@@ -172,7 +204,8 @@ public class Extractors {
 			word.setWordStart(rs.getDouble("wordStart"));
 			word.setWorkLineID(rs.getInt("workLineId"));
 			word.setParsedForm(rs.getString("parsedForm"));
-				
+			word.setDisambiguated(rs.getString("disambiguated"));	
+			
 			result.add(word);
 		}
 		
@@ -199,4 +232,29 @@ public class Extractors {
 		return result;
 	}
 	
+	public static List<Integer> extractYears(ResultSet rs) throws SQLException{
+		
+		List<Integer> result = new ArrayList<Integer>();
+		
+		while(rs.next()){			
+			Integer cur = rs.getInt("year");
+		
+			result.add(cur);
+		}
+		
+		return result;
+	}
+	
+	public static List<String> extractLocations(ResultSet rs) throws SQLException{
+		
+		List<String> result = new ArrayList<String>();
+		
+		while(rs.next()){			
+			String cur = rs.getString("location");
+		
+			result.add(cur);
+		}
+		
+		return result;
+	}
 }

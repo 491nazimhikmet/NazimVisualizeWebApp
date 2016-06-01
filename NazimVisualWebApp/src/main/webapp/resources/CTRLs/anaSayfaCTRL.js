@@ -1,6 +1,7 @@
 app.controller('anaSayfaCTRL', function($scope) {
 	$scope.showGirisSayfasi = true;
 	$scope.showAramaSayfasi = false;
+	$scope.showDetayliAramaSayfasi = false;
 
 	$scope.showSection = function (secNum){
 		showMainModal();
@@ -9,15 +10,24 @@ app.controller('anaSayfaCTRL', function($scope) {
 			$scope.showGirisSayfasi = true;
 			$scope.showAramaSayfasi = false;
 			$scope.showAramaSonucSayfasi = false;
+			$scope.showDetayliAramaSayfasi = false;
 		}else if(secNum == 2){
 			$scope.showGirisSayfasi = false;
 			$scope.showAramaSayfasi = true;
 			$scope.showAramaSonucSayfasi = false;
+			$scope.showDetayliAramaSayfasi = false;
 		}else if(secNum == 3){
 			$scope.showGirisSayfasi = false;
 			$scope.showAramaSayfasi = false;
 			$scope.showAramaSonucSayfasi = true;
+			$scope.showDetayliAramaSayfasi = false;
+		}else if(secNum == 4){
+			$scope.showGirisSayfasi = false;
+			$scope.showAramaSayfasi = false;
+			$scope.showAramaSonucSayfasi = false;
+			$scope.showDetayliAramaSayfasi = true;
 		}
+
 	}
 
 	$scope.showAramaSonuc = false;

@@ -1,0 +1,165 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<style type="text/css">
+	/* Modal Header */
+	.modal-header {
+		padding: 2px 16px;
+		/*background-color: #5cb85c;
+		color: white;*/
+	}
+
+	/* The Modal (background) */
+	.modal {
+		display: none; /* Hidden by default */
+		position: fixed; /* Stay in place */
+		z-index: 1050; /* Sit on top */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+		overflow: auto; /* Enable scroll if needed */
+		background-color: rgb(0,0,0); /* Fallback color */
+		background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Body */
+	.modal-body {padding: 2px 16px;}
+
+	/* Modal Content/Box */
+	.modal-content {
+		background-color: #fefefe;
+		margin: 15% auto; /* 15% from the top and centered */
+		padding: 20px;
+		border: 1px solid #888;
+		width: 80%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+		color: #aaa;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
+</style>
+
+<div class="container" ng-controller="detayliAramaCTRL">
+	
+	<ul class="nav nav-tabs nav-justified">
+		<li class="active" ng-click="showYearComp = true; showPlaceComp= false">
+			<a data-toggle="tab" href="#home">Yıla Göre Karşılaştır</a>
+		</li>
+		<li ng-click="showYearComp = false; showPlaceComp= true">
+			<a data-toggle="tab" href="#menu1">Mekana Göre Karşılaştır</a>
+		</li>
+	</ul>
+	<div class="panel panel-info">
+		<div class="panel-body">
+			<form role="form" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-5">Karşılaştırılacak Kelimeler</label>
+					<div class="col-xs-7" style="text-align:right;">
+						<input type="text" class="form-control" ng-model="searchWords" placeholder="kelime1,kelime2,kelime3">
+					</div>
+
+				</div>
+
+				<div class="form-group">
+
+					<div class="col-xs-6" ng-show="showYearComp">
+						<label><u> İlk Dönem Aralığı </u></label>
+						<div class="form-group">
+							<label class="col-xs-5">Başlangıç Yılı</label>
+							<div class="col-xs-7" style="text-align:right;">
+								<select class="form-control" ng-model="seciliBasDonemIlk" ng-options="curYear as curYear for curYear in allYears">
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-5">Bitiş Yılı</label>
+							<div class="col-xs-7" style="text-align:right;">
+								<select class="form-control" ng-model="seciliBasDonemSon" ng-options="curYear as curYear for curYear in allYears">
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6" ng-show="showYearComp">
+						<label><u> Karşılaştırılacak Dönem Aralığı </u></label>
+						<div class="form-group">
+							<label class="col-xs-5">Başlangıç Yılı</label>
+							<div class="col-xs-7" style="text-align:right;">
+								<select class="form-control" ng-model="seciliBitDonemIlk" ng-options="curYear as curYear for curYear in allYears">
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-5">Bitiş Yılı</label>
+							<div class="col-xs-7" style="text-align:right;">
+								<select class="form-control" ng-model="seciliBitDonemSon" ng-options="curYear as curYear for curYear in allYears">
+								</select>
+							</div>
+						</div>
+					</div>	
+				</div>
+
+				<div class="form-group" ng-show="showPlaceComp">
+					<label class="col-xs-5">İlk Mekan</label>
+					<div class="col-xs-7" style="text-align:right;">
+						<select class="form-control" ng-model="firstPlace" ng-options="curPlace as curPlace for curPlace in allPlaces">
+						</select>
+					</div>
+				</div>
+				<div class="form-group" ng-show="showPlaceComp">
+					<label class="col-xs-5">İkinci Mekan</label>
+					<div class="col-xs-7" style="text-align:right;">
+						<select class="form-control" ng-model="secondPlace" ng-options="curPlace as curPlace for curPlace in allPlaces">
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-5"></label>
+					<div class="col-xs-7" style="text-align:right;">
+						<button type="button" class="btn btn-success" onclick="openSpaceModal()" ng-show="showLastResult">Sonucu Göster</button>
+						<button type="button" class="btn btn-info" ng-click="detayliAra()">Ara</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function closeSPaceModal(){
+			$("#spaceModal").hide();
+		}
+		function openSpaceModal(){
+			$("#spaceModal").show();
+		}
+	</script>
+	<!-- Frequency PlaceModal -->
+	<div id="spaceModal" class="modal" style="z-index: 1050;">
+
+
+		<!-- Modal content -->
+		<div class="modal-content" style="margin-top: 1%;">
+			<div class="modal-header">
+				<span class="close" onclick = "closeSPaceModal()" >x</span>
+				<span>Kelimelerin Karşılaştırma değerlerine göre sonuçları</span>
+			</div>
+			<div class="modal-body">
+				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
+				<canvas id="canvasSpace" width="100%"></canvas>
+			</div>
+		</div>
+
+	</div>
+	<!--<div class="row">
+		<canvas id="canvasSpace" width="100%"></canvas>
+	</div>-->
+</div>

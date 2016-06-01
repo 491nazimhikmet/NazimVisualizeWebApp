@@ -11,6 +11,10 @@ public class WordPoint {
 		setRadius(r);
 	}
 	
+	public WordPoint() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getPosX() {
 		return posX;
 	}

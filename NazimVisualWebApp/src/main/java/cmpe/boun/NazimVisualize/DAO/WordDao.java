@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import cmpe.boun.NazimVisualize.Model.PlaceWordLocation;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
 import cmpe.boun.NazimVisualize.Model.Word;
 import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
+import cmpe.boun.NazimVisualize.Model.WordYeardFreq;
 
 
 public class WordDao extends DBConnection{
@@ -71,6 +73,7 @@ public class WordDao extends DBConnection{
 			        "and t.workId = w.workId "+
 			    ") k "+
 			"group by year";
+		//System.out.println(query);
 		return Extractors.extractTermFreqYear(this.getStmt().executeQuery(query));
 	}
 
@@ -100,6 +103,52 @@ public class WordDao extends DBConnection{
 		
 		//System.out.println(query);
 		return Extractors.extractTermFreqPlace(this.getStmt().executeQuery(query));
+	}
+	
+	public List<PlaceWordLocation> getTermsWithPlaceUsage(String inStmt)throws SQLException{
+		String query =
+				" Select  k.disambiguated,location,sum(k.cnt) as frequency "+
+				" from (    "+
+					" select IF(w.LocationOfComp is null or w.LocationOfComp = '',b.location,w.LocationOfComp) as location,t.cnt, t.disambiguated "+
+					" from work w,book b,( "+
+					    " select workId,disambiguated,sum(k.wrdCnt) as cnt "+ 
+					    " from workLine a , ( "+
+					        " SELECT disambiguated,workLineId,count(*) as wrdCnt "+
+					        " FROM `word` "+
+					        " WHERE lower(disambiguated) in ("+inStmt+") "+
+					        " group by disambiguated,workLineId ) k  "+
+					    " where a.lineId = k.workLineId "+
+				        " group by workId,disambiguated ) t "+ 
+					" where w.bookId = b.bookId and t.workId = w.workId ) k "+ 
+				" group by k.disambiguated,location "+
+				" order by location";
+		//System.out.println(query);
+		return Extractors.extractWordWithFreqPlace(this.getStmt().executeQuery(query));
+	}
+	
+	public List<WordYeardFreq> getTermsWithYearUsage(String inStmt)throws SQLException{
+		String query =
+					"Select disambiguated,year,sum(k.cnt) as frequency "+
+				    " from ( "+
+				      "  select t.disambiguated,IF(w.year is null or w.year = '',b.year,w.year) as year,t.cnt "+ 
+				      "  from work w,book b,  "+
+				       "     (  "+
+				        "        select k.disambiguated,workId,sum(k.wrdCnt) as cnt "+  
+				        "        from workLine a ,  "+
+				         "           ( "+ 
+				          "              SELECT disambiguated,workLineId,count(*) as wrdCnt FROM `word` "+ 
+				           "             WHERE lower(disambiguated) in ("+inStmt+")  "+
+				            "            group by disambiguated,workLineId  "+
+				             "      ) k  "+
+				              "  where a.lineId = k.workLineId "+ 
+				              "   group by k.disambiguated,workId  "+
+				           " ) t "+
+				       " where w.bookId = b.bookId "+ 
+				       " and t.workId = w.workId  "+
+				    " ) k "+
+				" group by disambiguated,year" ;
+		//System.out.println(query);
+		return Extractors.extractWordWithFreqYear(this.getStmt().executeQuery(query));
 	}
 	
 	public Statement getStmt() {

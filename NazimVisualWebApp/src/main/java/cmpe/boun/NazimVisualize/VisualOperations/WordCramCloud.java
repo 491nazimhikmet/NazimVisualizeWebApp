@@ -42,7 +42,7 @@ public class WordCramCloud extends PApplet{
 
             size(width, height); 
             smooth();
-            background(53,141,173,(float)0.43);
+            background(171,238,255,(float)0.43);
             colorMode(HSB);
             initWordCram();
     }

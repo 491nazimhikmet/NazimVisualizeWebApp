@@ -16,10 +16,11 @@
 <script src="${pageContext.request.contextPath}/resources/CTRLs/anaSayfaCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/girisCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/siirAraCtrl.js"></script>
+<script src="${pageContext.request.contextPath}/resources/CTRLs/detayliAramaCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/VisualWebAppCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>
-<title>Giriş yapıldı</title>
+<title>Nazım Hikmet Şiirlerini Görselleştirme</title>
 <script type="text/javascript">
 	var showGiris = false;
 	var showKaydol = false;
@@ -81,9 +82,9 @@
 					<div ng-show="showAramaSayfasi" >
 						<%@ include file="searchPoem.html" %>
 					</div>
-					<!--<div ng-show="showAramaSonucSayfasi">
-						<%@ include file="gorselSonuc.html" %>
-					</div>-->
+				</div>
+				<div ng-show="showDetayliAramaSayfasi" >
+					<%@ include file="searchPoemInDetail.html" %>
 				</div>
 			</div>
 			<div class="bottomArrow">

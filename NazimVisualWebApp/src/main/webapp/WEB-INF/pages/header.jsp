@@ -27,11 +27,11 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		    <ul class="nav navbar-nav navbar-left">
-		    	<li>
+		    	<!--<li>
 		    		<a class="navbar-brand" href="#girisim" >
 				      	Örnek Görseller
 				    </a>
-		    	</li>
+		    	</li>-->
 		    	<li>
 		    		<a class="navbar-brand" href="#arama" ng-click="showSection(2)">
 				      	Arama
@@ -43,7 +43,7 @@
 				    </a>
 		    	</li>-->
 		    	<li>
-		    		<a class="navbar-brand" href="#">
+		    		<a class="navbar-brand" href="#" ng-click="showSection(4)">
 				      	Detaylı Arama
 				    </a>
 		    	</li>

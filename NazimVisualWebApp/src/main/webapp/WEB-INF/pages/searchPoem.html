@@ -1,139 +1,70 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <style type="text/css">
-	/* Modal Header */
-	.modal-header {
-		padding: 2px 16px;
-		/*background-color: #5cb85c;
-		color: white;*/
+	.scroll {
+	   overflow-y: scroll; 
+	   height:590px;
+	   height: 100vh;
+	}
+	.scroll::-webkit-scrollbar {
+	    width: 12px;
 	}
 
-	/* The Modal (background) */
-	.modal {
-		display: none; /* Hidden by default */
-		position: fixed; /* Stay in place */
-		z-index: 1050; /* Sit on top */
-		left: 0;
-		top: 0;
-		width: 100%; /* Full width */
-		height: 100%; /* Full height */
-		overflow: auto; /* Enable scroll if needed */
-		background-color: rgb(0,0,0); /* Fallback color */
-		background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	.scroll::-webkit-scrollbar-track {
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+	    border-radius: 10px;
 	}
 
-	/* Modal Body */
-	.modal-body {padding: 2px 16px;}
+	.scroll::-webkit-scrollbar-thumb {
+	    border-radius: 10px;
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	}
+</style>
+<style type="text/css">
+					
 
-	/* Modal Content/Box */
-	.modal-content {
-		background-color: #fefefe;
-		margin: 15% auto; /* 15% from the top and centered */
-		padding: 20px;
-		border: 1px solid #888;
-		width: 80%; /* Could be more or less, depending on screen size */
+	/* Tooltip text */
+	.gorselInfo .gorselInfoLbl {
+	    visibility: hidden;
+	    width: 200px;
+	    background-color: #555;
+	    color: #fff;
+	    text-align: center;
+	    padding: 5px 0;
+	    border-radius: 6px;
+
+	    /* Position the tooltip text */
+	    position: absolute;
+	    z-index: 1;
+	    bottom: 50%;
+	    left: 50%;
+	    margin-left: -100px;
+
+	    /* Fade in tooltip */
+	    opacity: 0;
+	    transition: opacity 1s;
 	}
 
-	/* The Close Button */
-	.close {
-		color: #aaa;
-		float: right;
-		font-size: 28px;
-		font-weight: bold;
+	/* Tooltip arrow */
+	.gorselInfo .gorselInfoLbl::after {
+	    content: "";
+	    position: absolute;
+	    top: 100%;
+	    left: 50%;
+	    margin-left: -5px;
+	    border-width: 5px;
+	    border-style: solid;
+	    border-color: #555 transparent transparent transparent;
 	}
 
-	.close:hover,
-	.close:focus {
-		color: black;
-		text-decoration: none;
-		cursor: pointer;
+	/* Show the tooltip text when you mouse over the tooltip container */
+	.gorselInfo:hover .gorselInfoLbl {
+	    visibility: visible;
+	    opacity: 1;
 	}
 </style>
 
-<script type="text/javascript">
-	// Get the modal
-	var modal = document.getElementById('myModal');
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-
-	function closeModal(){
-		$("#myModal").hide();
-	}
-
-	function closeFreqPlaceModal(){
-		$("#freqPlaceModal").hide();
-	}
-	
-	function closeFreqBookModal(){
-		$("#freqBookModal").hide();
-	}
-
-
-	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
-		if (event.target == modal) {
-			closeModal()
-		}
-	}
-</script>
-
-
 <div class="container">
-
-	<!-- The Modal -->
-	<div id="myModal" class="modal" style="z-index: 1050;">
-
-
-		<!-- Modal content -->
-		<div class="modal-content" style="margin-top: 1%;">
-			<div class="modal-header">
-				<span class="close" onclick = "closeModal()" >x</span>
-				<span>Kelimenin Yıllara Göre Kullanımı :</span>
-			</div>
-			<div class="modal-body">
-				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
-				<canvas id="canvasFreqOverYearModal" width="100%"></canvas>
-			</div>
-		</div>
-
-	</div>
-	<!-- Frequency PlaceModal -->
-	<div id="freqPlaceModal" class="modal" style="z-index: 1050;">
-
-
-		<!-- Modal content -->
-		<div class="modal-content" style="margin-top: 1%;">
-			<div class="modal-header">
-				<span class="close" onclick = "closeFreqPlaceModal()" >x</span>
-				<span>Kelimenin Mekanlara Göre Kullanımı :</span>
-			</div>
-			<div class="modal-body">
-				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
-				<canvas id="canvasFreqOverPlaceModal" width="100%"></canvas>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- Frequency PlaceModal -->
-	<div id="freqBookModal" class="modal" style="z-index: 1050;">
-
-
-		<!-- Modal content -->
-		<div class="modal-content" style="margin-top: 1%;">
-			<div class="modal-header">
-				<span class="close" onclick = "closeFreqBookModal()" >x</span>
-				<span>Kelimenin Kitaba Göre Kullanımı :</span>
-			</div>
-			<div class="modal-body">
-				<!--<img id="modalImg" src="#" width="100%" lass="img-rounded">-->
-				<canvas id="canvasFreqOverBookModal" width="100%"></canvas>
-			</div>
-		</div>
-
-	</div>
 
 	<div class="row">
 		<div class="row">
@@ -159,186 +90,150 @@
 			</div>
 			<div class="col-sm-3"></div>
 		</div>
-		<style type="text/css">
-			.scroll {
-			   overflow-y: scroll; 
-			   height:450px;
-			}
-			.scroll::-webkit-scrollbar {
-			    width: 12px;
-			}
-
-			.scroll::-webkit-scrollbar-track {
-			    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-			    border-radius: 10px;
-			}
-
-			.scroll::-webkit-scrollbar-thumb {
-			    border-radius: 10px;
-			    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-			}
-		</style>
 
 		<div class="row">
-			<div class="col-md-9" ng-show="!gorselSonucShow">
+			<div class="col-md-12" ng-show="!gorselSonucShow">
 				<div ng-show="showResults" class="col-md-3 scroll">
 					<table class="table table-condensed" style="font-size:small;">
 						<thead>
 							<tr>
 								<th></th>
-								<th>Aranan Kelimenin Geçtiği Şiirleri</th>
+								<th style="font-size:initial;">Aranan Kelimenin Geçtiği Şiirleri</th>
 								<!--<th></th>-->
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="sonuc in aramaSonucList" ng-mouseover="highLightPlaceYear(sonuc,2)" ng-mouseleave="highLightPlaceYear(sonuc,3)">
+							<tr ng-repeat="sonuc in aramaSonucList">
 								<td>
-									<!--<button type="button"  ng-click="addToGorsellestirSiirList(sonuc)" class="btn btn-default" aria-label="Left Align">
-										<span id="sonucSymb{{sonuc.workID}}" class="glyphicon glyphicon-plus" style="color: green;" aria-hidden="true"></span>
-									</button>-->
+
 										<label>
 											 <input type="radio" ng-click="addToGorsellestirSiirList(sonuc)" name="optRadio">
 										</label>
 								</td>
 								<td>{{sonuc.name}}</td>
-								<!--<td>
-									<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="getSiir(sonuc)">
-										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-									</button>
-								</td>-->
+
 							</tr>
 						</tbody>
 					</table>	
 				</div>
 				<div class="col-md-9" ng-show="showResults">
-					<!--<div ng-show="showSiir" style="overflow-y: scroll; height:500px;">
-						<p id="siirinKendi">
-							
-						</p>
-					</div>-->
-					<h3 style="text-align: center;"><u><span>Görselleştirme seçenekleri</span></u></h3>
-					<div class="row" style="text-align: center">
-						<div class="col-md-6" > <!-- title="Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar">-->
+
+					<div style="text-align: center;"><label><h4><b><u><span>Görselleştirme seçenekleri</span><u></u></h4></label></div>
+					<div class="row" style="text-align: center; height:150px;">
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(4)">
+									<span>Barkod</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/barkod.png" class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Şiirin kişi çekimleri, olumluluk, uyarılma ve baskınlık bilgilerini taşıyan kimliğidir</span>
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(5)">
+									<span>Kelime Tekrarları</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/tekrarEx.png" class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Şiirde tekrar eden kelimeleri birbirine bağlayarak görsel oluşturur</span>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(7)">
+									<span>Kip ve Kişi</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/kipveKisiEx.png"  class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Şiirde kullanılan kelimelerin kip ve kişi çekimlerini gösterir</span>
+							</div>
+						</div>
+						
+					</div>
+					<div class="row" style="margin-top: 50px; text-align: center;height:150px;">
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(9)">
+									<span>Yıllara Göre Kullanım</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/freqOverYearEx.png"  class="img-thumbnail" style="height:100%">
+								</a>
+								<span class="gorselInfoLbl">Aranan kelime ya da dizinin yıllara göre kullanımıdır</span>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(10)">
+									<span>Kitaba Göre Kullanım</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/freqOverBookEx.png" class="img-thumbnail" style="height:100%" >
+								</a>
+							<span class="gorselInfoLbl">Aranan kelime ya da dizinin kitaba göre kullanımıdır</span>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(11)">
+									<span>Mekana Göre Kullanımı</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/freqOverPlace.png"  class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Aranan kelime ya da dizinin mekana göre kullanımıdır</span>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row" style="margin-top: 50px;text-align: center;height:150px;">
+
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(6)">
+									<span>Kullanılan Sıfatlar</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/adjectivesEx.png" class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Şiirdeki kelimelerin sıfatlık özelliklerini gösterir</span>
+							</div>
+						</div>
+
+						<div class="col-md-4" >
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(2)">
 									<span>Kelime Bulutu</span><br>
-									<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
+									<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" class="img-thumbnail" style="height:100%" >
 								</a>
 
 							<span class="gorselInfoLbl">Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar</span>
 							</div>
 						</div>
-						<style type="text/css">
-							
-
-							/* Tooltip text */
-							.gorselInfo .gorselInfoLbl {
-							    visibility: hidden;
-							    width: 200px;
-							    background-color: #555;
-							    color: #fff;
-							    text-align: center;
-							    padding: 5px 0;
-							    border-radius: 6px;
-
-							    /* Position the tooltip text */
-							    position: absolute;
-							    z-index: 1;
-							    bottom: 50%;
-							    left: 50%;
-							    margin-left: -100px;
-
-							    /* Fade in tooltip */
-							    opacity: 0;
-							    transition: opacity 1s;
-							}
-
-							/* Tooltip arrow */
-							.gorselInfo .gorselInfoLbl::after {
-							    content: "";
-							    position: absolute;
-							    top: 100%;
-							    left: 50%;
-							    margin-left: -5px;
-							    border-width: 5px;
-							    border-style: solid;
-							    border-color: #555 transparent transparent transparent;
-							}
-
-							/* Show the tooltip text when you mouse over the tooltip container */
-							.gorselInfo:hover .gorselInfoLbl {
-							    visibility: visible;
-							    opacity: 1;
-							}
-						</style>
-						<div class="col-md-6">
-							<a href="#" ng-click = "getGorsel(4)">
-								<span>Kelime İlişkileri</span><br>
-								<img src="${pageContext.request.contextPath}/resources/images/wordNetEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-							</a>
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(8)">
+									<span>Şiirin Gökkuşağı</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/roundedEx.png"  class="img-thumbnail" style="height:100%">
+								</a>
+								<span class="gorselInfoLbl">Şiirin satırlarını kullanılan kelimelerle birleştirerek bir gökkuşağı oluşturur</span>
+							</div>
 						</div>
+						
+
 					</div>
-					<div class="row" style="margin-top: 15px;text-align: center;">
-						<!--<div class="col-md-6">
-							<a href="#" ng-click = "getGorsel(3)">
-								<span>Rastgele Çizgiler</span><br>
-								<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-							</a>
-						</div>-->
-						<div class="col-md-6">
-							<a href="#" ng-click = "getGorsel(4)">
-								<span>Barkode</span><br>
-								<img src="${pageContext.request.contextPath}/resources/images/barkod.png"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-							</a>
-						</div>
-						<div class="col-md-6">
-							<a href="#" ng-click = "getGorsel(1)">
-								<span>Şiiri Oku</span><br>
-								<img src="${pageContext.request.contextPath}/resources/images/siirImg.jpg"  height="150" width="150" onmouseover="this.width=170;this.height=170" onmouseout="this.width=150;this.height=150">
-							</a>
+					<div class="row" style="margin-top: 50px;text-align: center;height:150px;">
+						<div class="col-md-4">
+							<div class="gorselInfo">
+								<a href="#" ng-click = "getGorsel(12)">
+									<span>Merdivenli Yapı</span><br>
+									<img src="${pageContext.request.contextPath}/resources/images/adjectivesEx.png" class="img-thumbnail" style="height:100%" >
+								</a>
+								<span class="gorselInfoLbl">Şiirdeki merdivenli yapıyı ve kelime uzunluklarını gösterir</span>
+							</div>
 						</div>
 					</div>
 
 				</div>
 			</div>
-			<div class="col-md-9" ng-show="gorselSonucShow">
+
+			<div class="col-md-12" ng-show="gorselSonucShow">
 				<%@ include file="gorselSonuc.html" %>
 			</div>
-			<style type="text/css">
-				.freqBaslik{
-					font-size: small;
-				}
-				.imgFreq{
-					width: 220px;
-					height: 150px;
-				}
-			</style>
-			<div class="col-md-3">
-				<div ng-show="showResults" style="text-align: center;">
-					<span class="freqBaslik">Kelimenin Yıllara Göre Kullanımı : </span>
-					<br>
-					<canvas id="canvasFreqOverYear" width="220" height="150" ng-mouseover="drawWordFreqOverYear(2)" ng-mouseleave="drawWordFreqOverYear(3)" ng-click= "showFrequencyModal()"></canvas>
-<!--
-					<img id="imgFrequency" style="display:none;" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">
--->
-					<span class="freqBaslik">Kelimenin Kitapa Göre Kullanımı : </span>
-					<br>
-					<canvas id="canvasFreqOverBook" width="220" height="150" ng-mouseover="drawWordFreqOverBook(2)" ng-mouseleave="drawWordFreqOverBook(3)" ng-click= "showFrequencyBookModal()"></canvas>
-					<!--<img id="imgFrequency3" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->
-
-					<br>
-
-					<span class="freqBaslik">Kelimenin Mekana Göre Kullanımı : </span>
-					<br>
-					<!--<img id="imgFrequency2" src="#" width="220" height="150" onmouseover="this.width=280;this.height=170" onmouseout="this.width=220;this.height=150" onclick= "showFrequencyModal()">-->
-
-					<canvas id="canvasFreqOverPlace" width="220" height="150" ng-mouseover="drawWordFreqOverPlace(2)" ng-mouseleave="drawWordFreqOverPlace(3)" ng-click= "showFrequencyPlaceModal()"></canvas>
-
-					<br>
-					
-				</div>
-			</div>	
-		</div>
 
 	</div>
 

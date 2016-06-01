@@ -1,7 +1,7 @@
 package cmpe.boun.NazimVisualize.Controller;
 
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,27 +10,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 
+import cmpe.boun.NazimVisualize.DAO.AffectiveDao;
+import cmpe.boun.NazimVisualize.DAO.WordDao;
 import cmpe.boun.NazimVisualize.DAO.WorkDao;
 import cmpe.boun.NazimVisualize.DAO.WorkLineDao;
-import cmpe.boun.NazimVisualize.Model.Work;
-import cmpe.boun.NazimVisualize.Model.WorkLine;
+import cmpe.boun.NazimVisualize.Model.AffectiveResult;
+import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
 import cmpe.boun.NazimVisualize.VisualOperations.OnurLineGorseli;
 import cmpe.boun.NazimVisualize.VisualOperations.WordCramCloud;
 import cmpe.boun.NazimVisualize.VisualOperations.WordFrequencyGraph;
-import cmpe.boun.NazimVisualize.VisualOperations.WordFrequencyPlace;
 
 @Controller
 public class GorselGetirController {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(GorselGetirController.class);
 
 	ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+	ApplicationContext context3 = new ClassPathXmlApplicationContext("Spring-Module.xml");
+	
+	WordDao wordDao4 = (WordDao) context3.getBean("WordDao");
 
 	WorkDao workdao = (WorkDao) context.getBean("WorkDao");
 	WorkLineDao worklinedao = (WorkLineDao) context.getBean("WorkLineDao");
@@ -114,6 +117,48 @@ public class GorselGetirController {
 		PrintWriter out = response.getWriter();
 		out.println(json);
 
+	}
+	
+	
+	@RequestMapping(value = "/getWordsOfWorkWithParsedForm", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getWordsOfWorkWithParsedForm(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+			throws Exception {
+
+		int workID = Integer.parseInt(siirId);
+		
+		System.out.println("getWordsOfWorkWithParsedForm "+ siirId);
+
+
+		
+		List<WordWithParsedForm> wordObj = new ArrayList<WordWithParsedForm>(wordDao4.getWordsWithParsedForm(workID));
+		
+		String json = new Gson().toJson(wordObj);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
+
+	
+	@RequestMapping(value = "/getAffectiveResultsOfWork", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getAffectiveResultsOfWork(@ModelAttribute("siirId") String siirId, HttpServletResponse response)
+			throws Exception {
+
+		int workID = Integer.parseInt(siirId);
+		
+		System.out.println("getAffectiveResultsOfWork "+ siirId);
+		
+		
+		AffectiveDao affectiveDao = (AffectiveDao) context.getBean("AffectiveDao");
+		
+		ArrayList<AffectiveResult> workLines = new ArrayList<AffectiveResult>(affectiveDao.getResultsByWorkId(workID));
+		
+		String json = new Gson().toJson(workLines);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 
 	}
 	

@@ -6,169 +6,88 @@
 		<div class="col-md-4">
 			<img src="${pageContext.request.contextPath}/resources/images/nazimIcon.jpg" class="img-rounded" alt="Cinque Terre" width="304" height="236">
 		</div>
-		<div class="col-md-4">
-			<button class="btn btn-success" onclick="getPng()">Karmaşık Şekilleri Getir</button>
-			<div class="row">
-				<img id="imgResult" src="#" width="304" height="236" lass="img-rounded">
-			</div> 
-		</div>
-		<div class="col-md-4">
-			<button class="btn btn-success" onclick="getWordCloud()">Word Cloud Getir</button>
-			<div class="row">
-				<img id="imgCloud" src="#" width="304" height="236" lass="img-rounded">
-			</div> 
+		<div class="col-md-8">
+			<p>
+				Bu web sitesi Türkçe metin ve duygulanım analizi yöntemlerinin Nazım Hikmet Ran'ın <b>Bütün Şiirleri</b> kitabına uygulanması  sonucu ortaya çıkan bulguları ve bulgular üzerinden yapılan görselleştirmeleri paylaşmak amacıyla oluşturulmuştur.
+				<br><br>
+				Sonuçlara göre şair toplam <b>753 şiir</b> yazmıştır. Bu şiirlerde <b>56773 satır</b> ve <b>208230 kelime</b> ve şiirlerin yazıldığı yerlere dair toplam <b> 21 farklı şehir</b> ismi bulunmaktadır. 
+				<br><br>
+				Arama sayfasını kullanarak aradığınız sözcüklerin hangi şiirlerde geçtiğini görebilir, bu şiirler için oluşturulan görselleştirmeleri inceleyebilirsiniz.
+				<br><br>
+				Detaylı arama sayfasını kullanarak aradığınız sözcüklerin farkı dönemlerde ya da farklı şehirlerde ne kadar kullanıldığını karşılaştırmalı olarak görebilirsiniz.
+
+
+			</p>
 		</div>
 	</div>
-	<div class="row">
-		<canvas  id="canvas1"></canvas><!--data-processing-sources="controlling.pde"-->
-		<canvas id="canvas2"></canvas>
+	<div class="row" style="margin-top:50px;">
+		<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+				<li data-target="#myCarousel" data-slide-to="3"></li>
+				<li data-target="#myCarousel" data-slide-to="4"></li>
+				<li data-target="#myCarousel" data-slide-to="5"></li>
+				<li data-target="#myCarousel" data-slide-to="6"></li>
+				<li data-target="#myCarousel" data-slide-to="7"></li>
+			</ol>
 
-		<script type="application/javascript">
-			var TermFreqYear = function(year,frequency){
-				this.year = year;
-				this.frequency = frequency;
-			};
-
-			TermFreqYear.prototype.toString = function(first_argument) {
-				console.log(this.year + " " + this.frequency);
-			};
-
-			var yearFreqList = {};
-
-			$.post('getWordFrequencyData',{searchText : "güneş"},function(responseList) {
-				yearFreqList = responseList;
-				//console.log(yearFreqList);
-		     
-
-				function getMaxFreqMinMaxYear(){
-					var maxFreq = 0;
-					var minYear = 10000;
-					var maxYear = 0;
-					for (var i = 0; i < yearFreqList.length; i++) {
-						if (yearFreqList[i].frequency > maxFreq && yearFreqList[i].year != 0)
-							maxFreq = yearFreqList[i].frequency;
-						
-						if(yearFreqList[i].year < minYear && yearFreqList[i].year != 0)
-							minYear = yearFreqList[i].year;
-						
-						if(yearFreqList[i].year > maxYear)
-							maxYear = yearFreqList[i].year;
-					}
-					return [maxFreq,minYear,maxYear];	 
+			<style type="text/css">
+				.imgCenter{
+					display: block;
+				    margin-left: auto;
+				    margin-right: auto;		    
+				    height: 100% !important;
+				    width: auto !important;
 				}
+			</style>
+			<!-- Wrapper for slides -->
+			<div class="carousel-inner" role="listbox" style="height: 304px;">
+				<div class="item active">
+					<img src="${pageContext.request.contextPath}/resources/images/tekrarEx.png" class="img-rounded imgCenter" alt="Cinque Terre">
+				</div>
 
-				function sketchProc2(processing) {
-					processing.setup = function(){
-						/*processing.width = 300;
-						processing.height = 300;*/
-						
-						processing.size(1920,1080);
-						processing.noLoop();
-					};
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/wordCloudEx.png" class="img-rounded imgCenter" alt="Cinque Terre" >
+				</div>
 
-					// Override draw function, by default it will be called 60 times per second
-					processing.draw = function() {
-						processing.background(220);
-						
-						var width = processing.width;
-						var height = processing.height;
-						var margin = 15;
-						var rectX = 1;
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/adjectivesEx.png" class="img-rounded imgCenter" alt="Cinque Terre">
+				</div>
 
-						var maxFreqMinMaxYear = getMaxFreqMinMaxYear();
-						var textSize = processing.map(width, 0, 3200, 10, 30);
-						margin = Math.round( processing.map(height, 0, 2000, 0, 200) );
-						rectX = processing.map(width, 0, 3200, 0, 10);
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/barkod.png" class="img-rounded imgCenter" alt="Cinque Terre">
+				</div>
 
-						for (var i = 0; i < yearFreqList.length; i++) {
-							var currentYear = yearFreqList[i];
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/freqOverYearEx.png" class="img-rounded imgCenter" alt="Cinque Terre" width="304" height="304">
+				</div>
 
-							if (currentYear.year == 0) {
-								processing.fill(50);
-								processing.textSize(textSize);
-								processing.textAlign(processing.LEFT, processing.TOP);
-								processing.textLeading(textSize); 
-								processing.text("Aramanın tarihi bulunamayan tekrar sayısı : " + currentYear.frequency,0,0);
-								continue;
-							}
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/kipveKisiEx.png" class="img-rounded imgCenter" alt="Cinque Terre" >
+				</div>
 
-							var xPosDataOne = processing.map(currentYear.year, maxFreqMinMaxYear[1]-1, maxFreqMinMaxYear[2], 0 + margin, width - margin);
-							var yPosDataOne = processing.map(currentYear.frequency, 0, maxFreqMinMaxYear[0], 0, height - Math.round(1.3 * margin));
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/randomLinesEx.png" class="img-rounded imgCenter" alt="Cinque Terre">
+				</div>
 
-							var year = currentYear.year + "";							
+				<div class="item">
+					<img src="${pageContext.request.contextPath}/resources/images/roundedEx.png" class="img-rounded imgCenter" alt="Cinque Terre" >
+				</div>
+			</div>
 
-							processing.fill(104, 58, 58);
-							processing.rectMode(processing.CORNER);
-							processing.rect(xPosDataOne, height - margin, rectX, -1 * yPosDataOne);
-						
-							processing.textAlign(processing.LEFT, processing.BOTTOM);
-							processing.textSize(textSize);
-							processing.text(currentYear.frequency,xPosDataOne,height-margin-yPosDataOne);
-
-							processing.fill(50);
-							processing.pushMatrix() ;
-							processing.translate(xPosDataOne,height - margin);
-							processing.rotate(-1*processing.PI/2);
-							processing.textSize(textSize);
-							processing.textAlign(processing.RIGHT, processing.UP);
-							processing.textLeading(textSize); 
-							processing.text(year,-5,rectX*1.5);
-							processing.popMatrix() ;
-						}
-
-					};
-				}
-
-
-
-				var canvas2 = document.getElementById("canvas2");
-				// attaching the sketchProc function to the canvas
-				var processingInstance2 = new Processing(canvas2, sketchProc2);
-				$("#canvas2").height(250);
-				//processingInstance2.noStroke();
-
-			});
-		</script>
-
-		<script type="application/javascript">
-			function sketchProc(processing) {
-			   // Override draw function, by default it will be called 60 times per second
-			   processing.draw = function() {
-			     // determine center and max clock arm length
-			     var centerX = processing.width / 2, centerY = processing.height / 2;
-			     var maxArmLength = Math.min(centerX, centerY);
-
-			     function drawArm(position, lengthScale, weight) {
-			     	processing.strokeWeight(weight);
-			     	processing.line(centerX, centerY,
-			     		centerX + Math.sin(position * 2 * Math.PI) * lengthScale * maxArmLength,
-			     		centerY - Math.cos(position * 2 * Math.PI) * lengthScale * maxArmLength);
-			     }
-
-			     // erase background
-			     processing.background(224);
-
-			     var now = new Date();
-
-			     // Moving hours arm by small increments
-			     var hoursPosition = (now.getHours() % 12 + now.getMinutes() / 60) / 12;
-			     drawArm(hoursPosition, 0.5, 5);
-
-			     // Moving minutes arm by small increments
-			     var minutesPosition = (now.getMinutes() + now.getSeconds() / 60) / 60;
-			     drawArm(minutesPosition, 0.80, 3);
-
-			     // Moving hour arm by second increments
-			     var secondsPosition = now.getSeconds() / 60;
-			     drawArm(secondsPosition, 0.90, 1);
-			 };
-			}
-
-			var canvas = document.getElementById("canvas1");
-			 // attaching the sketchProc function to the canvas
-			 var processingInstance = new Processing(canvas, sketchProc);
-		
-			 //processingInstance.noLoop();
-		</script>
+			<!-- Left and right controls -->
+			<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			</a>
+		</div>
+	
 	</div>
 </div>
