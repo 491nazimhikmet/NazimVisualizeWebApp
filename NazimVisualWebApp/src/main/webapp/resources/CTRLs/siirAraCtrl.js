@@ -911,9 +911,9 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 							xR=centerX-r*processing.cos(j*interval);
 							yR=centerY-r*processing.sin(j*interval);
 							
-							if(processing.mouseX<x+5 && processing.mouseX>x-5 && processing.mouseY<y+5 && 
-								processing.mouseY>y-5 || processing.mouseX<xR+5 && processing.mouseX>xR-5 
-								&& processing.mouseY<yR+5 && processing.mouseY>yR-5){
+							if((processing.mouseX<x+5 && processing.mouseX>x-5 && processing.mouseY<y+5 && 
+								processing.mouseY>y-5) || (processing.mouseX<xR+5 && processing.mouseX>xR-5 
+								&& processing.mouseY<yR+5 && processing.mouseY>yR-5)){
 								processing.stroke(250,0,0);
 								processing.fill(250,0,0);
 								processing.text(words[i].text,textX,textY);

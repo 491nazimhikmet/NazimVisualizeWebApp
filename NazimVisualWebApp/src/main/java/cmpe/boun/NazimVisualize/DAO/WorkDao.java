@@ -62,6 +62,7 @@ public class WorkDao extends DBConnection{
 				"                                group by wl.workId"+
 				"                             ) ws"+
 				"                             where w.workId = ws.workId"+
+				" and w.workId not in (6503,6504,6502,6505,6229,6506,6420,6877,6411,6735) "+
 				"                             order by ws.cnt desc" ;
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}

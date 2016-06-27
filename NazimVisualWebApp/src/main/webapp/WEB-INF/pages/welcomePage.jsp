@@ -56,7 +56,7 @@
 	    </div>
 	</div>
 
-	<div class="container" ng-show="!showProgressBar" style="padding:0;">
+	<div class="container mainContainer" ng-show="!showProgressBar" style="padding:0; ">
 		<%@ include file="header.jsp" %>
 
 		<div class="progress">

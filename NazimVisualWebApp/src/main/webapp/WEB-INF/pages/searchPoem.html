@@ -62,6 +62,13 @@
 	    visibility: visible;
 	    opacity: 1;
 	}
+
+	@media screen and (max-width: 767px) {
+
+		.scroll{
+			margin-right:15px;
+		}
+	}
 </style>
 
 <div class="container">
@@ -118,9 +125,9 @@
 				</div>
 				<div class="col-md-9" ng-show="showResults">
 
-					<div style="text-align: center;"><label><h4><b><u><span>Görselleştirme seçenekleri</span><u></u></h4></label></div>
+					<div style="text-align: center;"><label><h4><b><u><span>Görselleştirme seçenekleri</span></b></u></h4></label></div>
 					<div class="row" style="text-align: center; height:150px;">
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(4)">
 									<span>Barkod</span><br>
@@ -130,7 +137,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(5)">
 									<span>Kelime Tekrarları</span><br>
@@ -139,7 +146,7 @@
 								<span class="gorselInfoLbl">Şiirde tekrar eden kelimeleri birbirine bağlayarak görsel oluşturur</span>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(7)">
 									<span>Kip ve Kişi</span><br>
@@ -151,7 +158,7 @@
 						
 					</div>
 					<div class="row" style="margin-top: 50px; text-align: center;height:150px;">
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(9)">
 									<span>Yıllara Göre Kullanım</span><br>
@@ -161,7 +168,7 @@
 							</div>
 						</div>
 
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(10)">
 									<span>Kitaba Göre Kullanım</span><br>
@@ -170,7 +177,7 @@
 							<span class="gorselInfoLbl">Aranan kelime ya da dizinin kitaba göre kullanımıdır</span>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(11)">
 									<span>Mekana Göre Kullanımı</span><br>
@@ -184,7 +191,7 @@
 
 					<div class="row" style="margin-top: 50px;text-align: center;height:150px;">
 
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(6)">
 									<span>Kullanılan Sıfatlar</span><br>
@@ -194,7 +201,7 @@
 							</div>
 						</div>
 
-						<div class="col-md-4" >
+						<div class="col-xs-12 col-md-4" >
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(2)">
 									<span>Kelime Bulutu</span><br>
@@ -204,7 +211,7 @@
 							<span class="gorselInfoLbl">Şiirde geçen kelimeleri kullanım sıklığına göre büyüklük atayarak şiirde en çok kullanılan kelimeleri görmeyi sağlar</span>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(8)">
 									<span>Şiirin Gökkuşağı</span><br>
@@ -217,7 +224,7 @@
 
 					</div>
 					<div class="row" style="margin-top: 50px;text-align: center;height:150px;">
-						<div class="col-md-4">
+						<div class="col-xs-12 col-md-4">
 							<div class="gorselInfo">
 								<a href="#" ng-click = "getGorsel(12)">
 									<span>Merdivenli Yapı</span><br>
