@@ -38,6 +38,7 @@ public class GorselGetirController {
 	WorkDao workdao = (WorkDao) context.getBean("WorkDao");
 	WorkLineDao worklinedao = (WorkLineDao) context.getBean("WorkLineDao");
 
+	/*
 	@RequestMapping(value = "/randomLineGorselleriServlet", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public void BaseServlet(@ModelAttribute("siirId") String siirId,HttpServletResponse response)throws Exception {
 
@@ -101,12 +102,6 @@ public class GorselGetirController {
 		}
 		System.out.println("WordFrequencyGraphServlet");
 
-		/*WordFrequencyPlace embed2 = new WordFrequencyPlace(1920, 1080, searchText);
-		embed2.init();
-		
-		while (!embed2.finished) {
-
-		}*/
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -117,7 +112,7 @@ public class GorselGetirController {
 		PrintWriter out = response.getWriter();
 		out.println(json);
 
-	}
+	}*/
 	
 	
 	@RequestMapping(value = "/getWordsOfWorkWithParsedForm", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)

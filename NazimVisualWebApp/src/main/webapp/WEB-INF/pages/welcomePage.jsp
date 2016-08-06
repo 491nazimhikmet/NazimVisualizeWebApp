@@ -12,12 +12,13 @@
 <script src="${pageContext.request.contextPath}/resources/angular.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrapDir/css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
 <script src="${pageContext.request.contextPath}/resources/CTRLs/app.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/anaSayfaCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/girisCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/siirAraCtrl.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/detayliAramaCTRL.js"></script>
-<script src="${pageContext.request.contextPath}/resources/VisualWebAppCTRL.js"></script>
+<script src="${pageContext.request.contextPath}/resources/main.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>
 <title>Nazım Hikmet Şiirlerini Görselleştirme</title>
@@ -48,7 +49,7 @@
 </style>
 
 </head>
-<body ng-app="myApp" ng-controller="anaSayfaCTRL">
+<body ng-app="myApp" ng-controller="anaSayfaCTRL"  style="font-family: Raleway;" ><!-- onselectstart="return false" -->
 
 	<div class="progress ng-hide" style="position:fixed; top:30%; left: 25%; width: 50%; position:center; " ng-show="showProgressBar">
 	    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -85,6 +86,12 @@
 				</div>
 				<div ng-show="showDetayliAramaSayfasi" >
 					<%@ include file="searchPoemInDetail.html" %>
+				</div>
+				<div ng-show="showHakkimizdaSayfasi" >
+					<%@ include file="about.html" %>
+				</div>
+				<div ng-show="showIletisimSayfasi" >
+					<%@ include file="communication.html" %>
 				</div>
 			</div>
 			<div class="bottomArrow">

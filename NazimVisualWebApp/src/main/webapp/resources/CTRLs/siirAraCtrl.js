@@ -12,7 +12,14 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	$scope.highlightSiirYear = 0;
 	$scope.highlightSiirBook = 0;
 	$scope.highlightSiirPlace = "";
-	//$scope.showProgressBar = false;
+
+	$scope.$on('changeSearch',function(event, args){
+		$scope.searchTextM = args.searchText;
+	});
+
+	$scope.$on('callSearch',function(event, args){
+		$scope.callSearch();
+	});
 
 	$scope.baseImagePathUrl = appConfig.baseImagePathUrl;
 
@@ -65,25 +72,59 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
     		$scope.aramaSonucList = response;
     		$scope.showResults = true;
 
-
-    		BaseAPI.callServlet('getWordFrequencyOverBookData',{searchText : $scope.searchTextM}).then(function(response){
-	    	 	$scope.bookFreqList = response;
-	    	});
-
-	    	BaseAPI.callServlet('getWordFrequencyOverPlaceData',{searchText : $scope.searchTextM}).then(function(response){
-	    	 	$scope.placeFreqList = response;
-	    	});
-
-	    	BaseAPI.callServlet('getWordFrequencyData',{searchText : $scope.searchTextM}).then(function(response){
-	    	 	$scope.yearFreqList = response;
-	    	});
-
 	    	loadEnded();			
 
     	});
 
         
 	}
+
+	/** oluşturulan gorselin kaydetme kısmı başlangıç **/
+	function download() {
+	    var dt = document.getElementById("canvasGorselSonuc").toDataURL();
+	    this.href = dt;
+	};
+	downloadLnk.addEventListener('click', download, false);
+
+	
+	function convertDataURLToImageData(dataURL, callback) {
+	    if (dataURL !== undefined && dataURL !== null) {
+	        var canvas, context, image;
+	        canvas = document.createElement('canvas');
+	        canvas.width = 600;
+	        canvas.height = 1170;
+	        context = canvas.getContext('2d');
+	        image = new Image();
+	        image.addEventListener('load', function(){
+	            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+	            callback(context.getImageData(0, 0, canvas.width, canvas.height));
+	        }, false);
+	        image.src = dataURL;
+	    }
+	}
+
+	$scope.saveCurrentGorsel = function() {
+
+		var d = new Date();
+		var tm = d.getTime();
+
+		//var k = arrayGorsels[arrayGorsels.length-1].save(tm);
+
+		var image = document.getElementsByTagName("canvas")[0].toDataURL();
+		//console.log(image);
+
+		convertDataURLToImageData(
+		   	image,
+		    function(imageData){
+		         // Do something with imageData
+		    	console.log(imageData);
+		    }
+		);
+
+		bootbox.alert("Oluşturulduğunuz görsel kaydedilmiştir.");
+	}
+
+	/** oluşturulan gorselin kaydetme kısmı bitiş **/
 
 
 	$scope.drawTekrarGorsel = function(wordList){
@@ -685,15 +726,29 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	
 
 		function sketchSifatGorselResult(processing) {
+			
+			var maxLineNum = 8;
+			var parts = 30
+
 			processing.setup = function(){
 				
 				processing.size (width, height);		
-				processing.frameRate(10);  	
+				//processing.frameRate(10);  	
 				//processing.noLoop();
+
+				var margin = processing.map(height,0,1080,0,60);
+
+				var slider_height = (height-margin)/parts;
+
+				var bar_width = 16;
+
+				hs1 = new HScrollbar(width-bar_width, 0, bar_width, slider_height, bar_width,height);
 			};
 
 			// Override draw function, by default it will be called 60 times per second
-			processing.draw = function() {				
+			processing.draw = function() {
+
+
 				processing.background(255);
 				processing.stroke(0);
 				processing.fill(0);
@@ -704,13 +759,17 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				var y= processing.map(height,0,1080,0,30);
 				var margin = processing.map(height,0,1080,0,60);
 				var visualHeight = height - margin;
-				var intervalY= visualHeight/(worklines.length-1);
+				var intervalY= visualHeight/parts; //(worklines.length-1);
 				var intervalX= processing.map(width,0,1920,0,40);
 				var r= processing.map(height,0,1080,0,2);
 				var textY= processing.map(height,0,1080,0,80);
 				var textX= processing.map(width,0,1920,0,430) + leftShift;
 				var textY2= processing.map(height,0,1080,0,80);
 				var textX2= processing.map(width,0,1920,0,680) + leftShift;
+
+				hs1.update();
+				hs1.display();
+
 				processing.textSize( processing.map(width,0,1920,0,25));
 				processing.fill(0,0,200);
 				processing.text("Seçili Şiir: "+worklines[0].line, processing.map(width,0,1920,0,360)+leftShift,textY- processing.map(height,0,1080,0,60));
@@ -718,9 +777,12 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				processing.text("Diğer Sözcükler:", processing.map(width,0,1920,0,650)+leftShift,textY-processing.map(height,0,500,0,10));
 				processing.textSize( processing.map(width,0,1920,0,20));
 				processing.fill(0);
-				for(var i=0;i<words.length;i++){
-					//System.out.print(words.get(i).getText()+"	"+words.get(i).getParsedForm()+"	");
-					//System.out.println();
+
+				var startIndex = parseInt(parts * hs1.getPos());
+				console.log(hs1.getPos());
+
+				for(var i=startIndex; i<Math.min(startIndex + 30, words.length) ;i++){
+
 					if(processing.mouseX<x+4*r && processing.mouseX>x-(4*r) 
 						&& processing.mouseY<y+(4*r) && processing.mouseY>y-(4*r)){
 						processing.fill(250,0,0);
@@ -763,6 +825,76 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 					return true;
 				}
 				else return false;	
+			}
+
+			var HScrollbar = function (xp, yp, sw, sh, l,h){
+				this.over;           // is the mouse over the slider?
+				this.locked;
+
+			    this.swidth = sw;
+			    this.sheight = sh;
+			    this.bheight = h;
+			    var widthtoheight = h - sh;
+			    this.ratio = sh / widthtoheight;
+			    this.xpos = xp;
+			    this.ypos = yp;
+			    this.spos = 0;
+			    this.newspos = this.spos;
+			    this.sposMin = this.spos;
+			    this.sposMax = h-sh;
+			    this.loose = l;
+				
+			}
+
+			HScrollbar.prototype.overEvent = function() {
+				if (processing.mouseX > this.xpos && processing.mouseX < this.xpos+ this.swidth &&
+				   processing.mouseY > this.ypos && processing.mouseY < this.ypos+ this.bheight) {
+				  return true;
+				} else {
+				  return false;
+				}
+			}
+
+			HScrollbar.prototype.constrain = function(val, minv, maxv) {
+				return Math.min(Math.max(val, minv), maxv);
+			}
+
+			HScrollbar.prototype.getPos = function () {
+				// Convert spos to be values between
+				// 0 and the total width of the scrollbar
+				return this.spos * this.ratio;
+			}
+
+			HScrollbar.prototype.display = function() {
+				processing.noStroke();
+				processing.fill(204);
+				processing.rect(this.xpos, this.ypos, this.swidth, this.bheight);
+				if (this.over || this.locked) {
+				  processing.fill(0, 0, 0);
+				} else {
+				  processing.fill(102, 102, 102);
+				}
+				processing.rect(this.xpos, this.spos, this.swidth, this.sheight);
+			}
+
+			HScrollbar.prototype.update = function() {
+				if (this.overEvent()) {
+				  this.over = true;
+				} else {
+				  this.over = false;
+				}
+				if (processing.mousePressed  && this.over) {
+				  this.locked = true;
+				}
+				if (!processing.mousePressed ) {
+				  this.locked = false;
+				}
+				if (this.locked) {
+				  this.newspos = this.constrain(processing.mouseY-this.swidth/2, this.sposMin, this.sposMax);
+				}
+				if (Math.abs(this.newspos - this.spos) > 1) {
+				  this.spos = this.spos + (this.newspos- this.spos)/this.loose;
+				}
 			}	
 		}
 
@@ -775,6 +907,13 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 			arrayGorsels.push(processingInstance9);
 
 			$("#canvasGorselSonuc").css("width","100%");
+
+			canvasGorselSonuc.addEventListener("mousedown",function(){
+				processingInstance9.mousePressed = true;
+			},false);
+			canvasGorselSonuc.addEventListener("mouseup",function(){
+				processingInstance9.mousePressed = false;	
+		},false);
 		//processingInstance2.noStroke();
 	}
 
@@ -791,79 +930,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 			// Override draw function, by default it will be called 60 times per second
 			processing.draw = function() {
-
-
-				/*processing.background(255);
-				processing.stroke(0);
-				var r =  processing.map(height,0,1080,0,450);
-				var shift = processing.map(width,0,1920,0,50);
-				var centerX = width/2 - 9*shift;
-				var centerY  = height/2-shift;
-				var interval = 2*processing.PI/words.length;
-				var textX=centerX-r;
-				var textY=processing.map(height,0,1080,0,60);
-				
-				processing.ellipseMode(processing.CENTER);
-				processing.ellipse(centerX,centerY,2*r,2*r);
-				processing.textSize(processing.map(height,0,1080,0,14));
-				//processing.text("Tekrarlanan sözcüklere göre: "+$scope.seciliSiirName,textX,textY);
-				var siirLeftMargin = processing.map(width,0,1920,0,200);
-
-				var x=0;
-				var y=0;
-				var xR=0;
-				var yR=0;
-				
-				var preline=words[0].workLineID;
-			
-				processing.textSize(processing.map(height,0,1080,0,12));
-
-				for(var i=0; i<words.length; i++){	
-					x=centerX-r * processing.cos(i*interval); //herbir kelime için x ve y hesapla -> circle çiz
-					y=centerY-r * processing.sin(i*interval);
-					
-					shift = processing.map(width,0,1920,0,350+18*words[i].wordStart/10);
-					textX = centerX+shift+siirLeftMargin; 
-					if(words[i].workLineID != preline){
-						textY+=processing.map(height,0,1080,0,15);
-					}	
-					preline=words[i].workLineID;
-					processing.fill(0);
-					
-					var catchMouseMargin = 10;
-
-					if(processing.mouseX<x+processing.map(height,0,1080,0,catchMouseMargin) &&processing.mouseX>x-processing.map(height,0,1080,0,catchMouseMargin) 
-						&& processing.mouseY<y+processing.map(height,0,1080,0,catchMouseMargin) && processing.mouseY>y-processing.map(height,0,1080,0,catchMouseMargin)){
-						processing.fill(255,0,0);
-						processing.stroke(255,0,0);
-					}
-					processing.ellipse(x,y,processing.map(height,0,1080,0,10),processing.map(height,0,1080,0,10));
-					processing.text(words[i].text,textX,textY);
-					processing.fill(0);
-					processing.stroke(0);
-					processing.noFill();
-					
-
-					for(var j=0; j<words.length; j++){//şirrdeki kendisi dışında herbir kelime için parsed formu control et
-						if(words[i].disambiguated == words[j].disambiguated && j!=i){
-							//System.out.println(i+": "+ words.get(i).getText()+" j:"+ j+words.get(j).getParsedForm());
-							xR=centerX-r * processing.cos(j*interval);
-							yR=centerY-r * processing.sin(j*interval);
-							if(processing.mouseX<x+catchMouseMargin && processing.mouseX>x-catchMouseMargin && processing.mouseY<y+catchMouseMargin && processing.mouseY>y-catchMouseMargin
-								|| processing.mouseX<xR+catchMouseMargin && processing.mouseX>xR-catchMouseMargin && processing.mouseY<yR+catchMouseMargin && processing.mouseY>yR-catchMouseMargin){
-								processing.stroke(250,0,0);
-								processing.fill(250,0,0);
-								processing.ellipse(x,y, processing.map(height,0,1080,0,10), processing.map(height,0,1080,0,10));
-								processing.text(words[i].text,textX,textY);
-								processing.ellipse(xR,yR, processing.map(height,0,1080,0,10), processing.map(height,0,1080,0,10));
-								processing.noFill();
-							}
-							processing.curve(x+xR,y+yR,x,y,xR,yR,x-xR,y-yR);
-							processing.stroke(0);
-						}	
-					}
-				}
-				*/
 
 				processing.background(255);
 				processing.stroke(0);
@@ -1302,18 +1368,30 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	}
 
 	$scope.getfreqOverPlaceGorselOfSiiir = function(){
-		$scope.gorselSonucShow = true;
-		$scope.drawfreqOverPlaceGorsel();
+		BaseAPI.callServlet('getWordFrequencyOverPlaceData',{searchText : $scope.searchTextM}).then(function(response){
+    	 	$scope.placeFreqList = response;
+    	 	$scope.gorselSonucShow = true;
+			$scope.drawfreqOverPlaceGorsel();
+    	});
+		
 	}
 
 	$scope.getfreqOverYearGorselOfSiiir = function(){
-		$scope.gorselSonucShow = true;
-		$scope.drawfreqOverYearGorsel();
+		BaseAPI.callServlet('getWordFrequencyData',{searchText : $scope.searchTextM}).then(function(response){
+    	 	$scope.yearFreqList = response;
+    	 	$scope.gorselSonucShow = true;
+			$scope.drawfreqOverYearGorsel();
+    	});
+		
 	}
 
 	$scope.getfreqOverBookGorselOfSiiir = function(){
-		$scope.gorselSonucShow = true;
-		$scope.drawfreqOverBookGorsel();
+		BaseAPI.callServlet('getWordFrequencyOverBookData',{searchText : $scope.searchTextM}).then(function(response){
+    	 	$scope.bookFreqList = response;
+    	 	$scope.gorselSonucShow = true;
+			$scope.drawfreqOverBookGorsel();
+    	});
+		
 	}
 
 	$scope.getBubbleGorselOfSiiir = function(){
@@ -1358,11 +1436,9 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		
 		BaseAPI.callServlet('getWordsOfWorkWithParsedForm',{siirId:$scope.seciliSiir+""}).then(function(response) {
 			
-			console.log(response);
 
 			BaseAPI.callServlet('getWorkLinesOfWork',{siirId:$scope.seciliSiir+""}).then(function(siirLines) {
             	$scope.gorselSonucShow = true;
-				console.log(siirLines);
 
 				$scope.drawRoundedGorsel(response,siirLines);
 
@@ -1380,7 +1456,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 			BaseAPI.callServlet('getWorkLinesOfWork',{siirId:$scope.seciliSiir+""}).then(function(siirLines) {
             	$scope.gorselSonucShow = true;
-				console.log(siirLines);
 
 				$scope.drawKipveKisiGorsel(response,siirLines);
 
@@ -1394,11 +1469,9 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		
 		BaseAPI.callServlet('getWordsOfWorkWithParsedForm',{siirId:$scope.seciliSiir+""}).then(function(response) {
 			
-			console.log(response);
 
 			BaseAPI.callServlet('getWorkLinesOfWork',{siirId:$scope.seciliSiir+""}).then(function(siirLines) {
             	$scope.gorselSonucShow = true;
-				console.log(siirLines);
 
 				$scope.drawSifatGorsel(response,siirLines);
 
@@ -1414,11 +1487,14 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		
 		BaseAPI.callServlet('getWordsOfWorkWithParsedForm',{siirId:$scope.seciliSiir+""}).then(function(response) {
 			$scope.gorselSonucShow = true;
-			//console.log(response);
 
 			$scope.drawTekrarGorsel(response);
 
-        });
+        }, function(reason) {
+		  // rejection
+		  $scope.gorselSonucShow = false; 
+		  $scope.showGorselGeriDon=true;
+		});
 	}
 
 	$scope.siiriOku = function(){
@@ -1427,7 +1503,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		BaseAPI.callServlet('getSiir',{siirId:$scope.seciliSiir+""}).then(function(response) {
 			$scope.showSiir = true;
 			$scope.gorselSonucShow = true;
-			//console.log(response);
 			$('#siirinKendi').html(response); 
 			//loadEnded();
         });
@@ -1437,42 +1512,10 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		loadProgress();
 		BaseAPI.callServlet('getSiir',{siirId:work.workID+""}).then(function(response) {
 			$scope.showSiir = true;
-			//console.log(response);
 			$('#siirinKendi').html(response); 
 			loadEnded();
         });
 	}
-
-	$scope.getWordCloud = function(){
-		loadProgress();
-		BaseAPI.callServlet('WordCloudServlet',{siirId:$scope.seciliSiir+""}).then(function(responseText) {
-			$scope.gorselSonucShow = true;
-			$scope.showImgResult = true;
-
-            $('#imgGorselResult').attr('src',$scope.baseImagePathUrl+responseText); 
-            $('#imgGorselResult')[0].src =$scope.baseImagePathUrl+responseText; 
-        	$("#imgGorselResult").show();
-
-			loadEnded();
-			
-        });
-	}
-
-	$scope.getRandomLines = function(){
-		loadProgress();
-		BaseAPI.callServlet('randomLineGorselleriServlet',{siirId:$scope.seciliSiir+""}).then(function(responseText) {
-            
-            $scope.gorselSonucShow = true;
-            $scope.showImgResult = true;
-
-            $('#imgGorselResult').attr('src',$scope.baseImagePathUrl+responseText); 
-            $('#imgGorselResult')[0].src =$scope.baseImagePathUrl+responseText; 
-        	$("#imgGorselResult").show(); 
-
-			loadEnded();
-        });
-	}
-
 	
 
 	function loadProgress(){

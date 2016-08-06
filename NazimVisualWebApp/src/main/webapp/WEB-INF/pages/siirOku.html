@@ -1,0 +1,21 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<script type="text/javascript">
+	
+</script>
+
+<div class="row" ng-controller="siirOkuCTRL">
+	<form ng-submit="callSearch()">
+		<div class="input-group">
+			<input type="text" class="form-control" ng-model="searchID" placeholder='Şiir ID' aria-describedby="basic-addon1">
+			<span class="input-group-addon input-group-btn" id="basic-addon1">
+				<button type="button" class="btn btn-default" aria-label="Left Align" style="padding:0px;background:none;border:none;" ng-click="callSearch()">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				</button>
+			</span>
+		</div>
+	</form>
+	<div class="row" id="siirinOku" style="text-align:center;">
+		
+	</div>
+</div>

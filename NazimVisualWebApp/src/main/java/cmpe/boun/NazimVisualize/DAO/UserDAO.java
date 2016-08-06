@@ -82,8 +82,10 @@ public class UserDAO extends User{
 			   }else if(userMailExists(user.getEmail())){
 				   success = false;
 				   addErrormessage = "Kullanıcı maili daha önce kullanılmıştır.";
-			   }
-			   else{
+			   }else if(!user.getIsActivated()){
+				   success = false;
+				   addErrormessage = "Lütfen Kullanıcı Sözleşmesini okuyunuz ve kabul ediniz.";
+			   }else{
 				   user.setPassword(hashPassword(user.getPassword()));
 			   }
 			
@@ -93,7 +95,7 @@ public class UserDAO extends User{
 				   //mail at
 			   }
 			   
-			   user.setIsActivated(false);
+			   //user.setIsActivated(false);
 			   
 			   String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
 	           java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);

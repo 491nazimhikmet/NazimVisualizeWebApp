@@ -59,6 +59,20 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- visualize poems filters -->
+    <filter>
+        <filter-name>VisualizePoemFilter</filter-name>
+        <filter-class>cmpe.boun.NazimVisualize.Servlets.VisualizePoemFilter</filter-class>
+        <init-param>
+			<param-name>look-urls</param-name>
+			<param-value>/getWordsOfWorkWithParsedForm,/getSiir,/getWordFrequencyData,/getWordFrequencyOverPlaceData,/getWordFrequencyOverBookData,/getWorkLinesOfWork,/getAffectiveResultsOfWork,/getWordsOfWorkWithParsedForm,/detayliAra</param-value>
+	   	</init-param>
+    </filter>
+ 
+    <filter-mapping>
+        <filter-name>VisualizePoemFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter>  
 	    <filter-name>encodingFilter</filter-name>  

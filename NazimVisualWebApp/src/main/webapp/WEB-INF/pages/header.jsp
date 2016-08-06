@@ -14,7 +14,8 @@
 
 	@media screen and (min-width: 767px) {
 	    .navbar-right .navbar-brand{
-			padding-right: 30px;
+			padding-right: 25px;
+			padding-left: 25px;
 		} 
 
 		.navbar-right{
@@ -34,7 +35,10 @@
 		}
 	}
 
-	
+	.navbar-nav>li>a:hover {
+	    color: #333;
+	    background-color: #00ADEF !important;
+	}
 		
 </style>
 
@@ -48,7 +52,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#anasayfa" ng-click="showSection(1)" style="padding:0">
+	      <a class="navbar-brand" href="anasayfa" ng-click="showSection(1)" style="padding:0">
 	      	<img src="${pageContext.request.contextPath}/resources/images/logo_renkli_zeminsiz1000.png" class="img-rounded" height="100">
 	      </a>
 	    </div>
@@ -58,18 +62,31 @@
 		    
 	    	<ul class="nav navbar-nav navbar-right">
 		    	<li>
-		    		<a class="navbar-brand" href="#arama" ng-click="showSection(1)">
+		    		<a class="navbar-brand" href="#anasayfa" ng-click="showSection(1)">
 				      	Ana Sayfa
 				    </a>
 		    	</li>
 		    	<li>
-		    		<a class="navbar-brand" href="#arama" ng-click="showSection(2)">
-				      	Arama
+		    		<a class="navbar-brand" href="#hakkimizda" ng-click="showSection(5)">
+				      	Proje Hakkında
 				    </a>
 		    	</li>
+		    	
 		    	<li>
 		    		<a class="navbar-brand" href="#" ng-click="showSection(4)">
 				      	Detaylı Arama
+				    </a>
+		    	</li>
+		    	<li>
+		    		<a class="navbar-brand" href="#" ng-click="showSection(6)">
+				      	İletişim
+				    </a>
+		    	</li>
+		    	<li>
+		    		<a class="navbar-brand" href="#arama" ng-click="showSection(2)">
+				      	<button type="button" class="btn btn-default btn-lg" aria-label="Left Align" style="padding:0px;background:none;border:none;">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</button>
 				    </a>
 		    	</li>
 		   
@@ -79,7 +96,7 @@
 	      	%>
 
 		    	<div class="btn-group" role="group">
-		    		<button type="button" class="btn btn-info navbar-btn" onclick="showSignIn()">Giriş Yap</button>
+		    		<button type="button" class="btn btn-info navbar-btn" onclick="showSignIn()" style="background-color:#00ADEF !important;">Giriş Yap</button>
   					<button type="button" class="btn btn-default navbar-btn" onclick="showSignUp()">Kaydol</button>
 		    	</div>
 

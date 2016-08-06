@@ -1,4 +1,5 @@
 
-app.controller('girisCTRL', function($scope) {
+app.controller('girisCTRL', function($scope,sharedProperties,$rootScope) {
 
+	
 });

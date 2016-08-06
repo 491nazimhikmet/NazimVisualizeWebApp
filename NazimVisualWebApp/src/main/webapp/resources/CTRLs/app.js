@@ -46,6 +46,11 @@ app.factory("BaseAPI",[ '$http', '$q','appConfig', function ($http, $q,appConfig
 
                 }).
                 error(function (err, status) { 
+
+                    bootbox.alert(err, function() {
+                      location.reload();
+                    });
+                    
                     deferred.reject(err);
                 });
 
@@ -55,3 +60,16 @@ app.factory("BaseAPI",[ '$http', '$q','appConfig', function ($http, $q,appConfig
 
     };
 }]);
+
+app.service('sharedProperties', function () {
+        var searchText = "";
+
+        return {
+            getSearchText: function () {
+                return searchText;
+            },
+            setSearchText: function(value) {
+                searchText = value;
+            }
+        };
+    });
