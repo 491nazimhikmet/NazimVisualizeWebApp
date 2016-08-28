@@ -18,6 +18,7 @@
 <script src="${pageContext.request.contextPath}/resources/CTRLs/girisCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/siirAraCtrl.js"></script>
 <script src="${pageContext.request.contextPath}/resources/CTRLs/detayliAramaCTRL.js"></script>
+<script src="${pageContext.request.contextPath}/resources/CTRLs/HScrollbar.js"></script>
 <script src="${pageContext.request.contextPath}/resources/main.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>

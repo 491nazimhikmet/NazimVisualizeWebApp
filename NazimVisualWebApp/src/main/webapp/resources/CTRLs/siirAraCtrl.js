@@ -127,6 +127,32 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	/** oluşturulan gorselin kaydetme kısmı bitiş **/
 
 
+	function addMouseUpDownWheelEventsToCanvas(varCanvas, varProcessing,varHScrollBar){
+		varCanvas.addEventListener("mousedown",function(){
+			varProcessing.mousePressed = true;
+		},false);
+		varCanvas.addEventListener("mouseup",function(){
+			varProcessing.mousePressed = false;	
+		},false);
+
+		var isMoving=false;
+
+		varCanvas.addEventListener('mousewheel',function(event){
+		    //mouseController.wheel(event);
+		    event.preventDefault();
+		    if (isMoving) return;
+
+		    varHScrollBar.setScrollPos(event.deltaY);
+
+		    isMoving = true;
+			   setTimeout(function() {
+			    isMoving=false;
+			   },250);
+
+		    return false; 
+		}, false);
+	}
+
 	$scope.drawTekrarGorsel = function(wordList){
 			
 		var canvasHeight = $("#canvasGorselSonuc").height();
@@ -169,10 +195,18 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 	}
 
-	$scope.drawfreqOverYearGorsel = function(){
+	$scope.drawBubbleGorsel = function(siirLines,parsedWords){
 			
 		$("#canvasGorselSonuc").height(600);
 		$("#canvasGorselSonuc").width(1170);	
+		var canvasHeight = $("#canvasGorselSonuc").height();
+		var canvasWidth = $("#canvasGorselSonuc").width();
+		$scope.sketchBuubleGorselSonucCanvas(siirLines,parsedWords,canvasHeight,canvasWidth);
+
+	}
+
+	$scope.drawfreqOverYearGorsel = function(){
+			
 		var canvasHeight = $("#canvasGorselSonuc").height();
 		var canvasWidth = $("#canvasGorselSonuc").width();
 		var yearFreqList = $scope.yearFreqList;
@@ -182,8 +216,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 	$scope.drawfreqOverBookGorsel = function(){
 			
-		$("#canvasGorselSonuc").height(600);
-		$("#canvasGorselSonuc").width(1170);	
 		var canvasHeight = $("#canvasGorselSonuc").height();
 		var canvasWidth = $("#canvasGorselSonuc").width();
 		var bookFreqList = $scope.bookFreqList;
@@ -193,8 +225,6 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 	$scope.drawfreqOverPlaceGorsel = function(){
 			
-		$("#canvasGorselSonuc").height(600);
-		$("#canvasGorselSonuc").width(1170);	
 		var canvasHeight = $("#canvasGorselSonuc").height();
 		var canvasWidth = $("#canvasGorselSonuc").width();
 		$scope.sketchFreqPlaceCanvas($scope.placeFreqList,canvasHeight,canvasWidth);
@@ -205,6 +235,146 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		for(var i=0; i<arrayGorsels.length; i++){
 			arrayGorsels[i].exit();
 		}
+	}
+
+	$scope.sketchBuubleGorselSonucCanvas = function (satırlar,words,height,width){
+	
+
+		function sketchBubbleGorselResult(processing) {
+			
+			var zoom = 1;
+			var flag = false;
+			var spaceCount=0;
+
+			processing.setup = function(){
+				
+				processing.size (width, height);		
+				processing.frameRate(50);  	
+				processing.stroke(255);
+
+			};
+
+			// Override draw function, by default it will be called 60 times per second
+			processing.draw = function() {						
+				
+				if(flag)
+					processing.background(255);//circle 
+				else
+					processing.background(180);
+				
+				processing.scale(zoom);
+				
+				
+				var x=processing.map(width,0,1920,0,30); //x coordinate of the ellipse
+				var y=processing.map(height,0,1080,0,40); //y coordinate of the ellipse
+				var r=processing.map(height,0,1080,0,15);
+				var color = [50,50,50];
+						
+				var alpha=255;
+				
+				var interY = processing.map(height,0,1080,0,40);
+						
+				for(var i=0;i<words.length;i++){
+					if(i!=0 && words[i].workLineID != words[i-1].workLineID){	
+						y+=interY;
+					}	
+						
+					x=words[i].wordStart*3/2;	
+					r=words[i].text.length*2;//length of the word
+						
+					if(flag)	
+					alpha = 40;
+								
+					color = setColor(words[i].text);	
+					processing.fill(color[0],color[1],color[2],alpha);
+								
+					processing.ellipse(x,y,r,r);	
+								
+					//to see poetry
+					if(flag){
+						alpha = 255;
+						processing.textSize(11);
+						processing.fill(0,255);
+						processing.text(words[i].text,x,y);	
+					}		
+				}
+				
+			};
+
+			/*processing.keyPressed() {
+				if(processing.key == processing.CODED){
+					if(processing.keyCode == processing.UP){
+						zoom += .03;
+					}
+					else if(processing.keyCode == processing.DOWN){
+						zoom -= .03;	
+					}
+				}	
+				if (processing.key == ' '){
+					spaceCount++;
+					if(spaceCount%2 == 1){
+						flag = true;
+					}else 
+						flag = false;
+				}
+			}*/
+
+			function setColor(word){
+				var color = [50,50,50];
+				
+				if(word.indexOf("beyaz") !== -1){
+					color[0] =255;
+					color[1] =255;
+					color[2] =255;
+				}else if(word.indexOf("kızıl") !== -1){
+					//fill(127,0,0);
+					color[0] =127;
+					color[1] =0;
+					color[2] =0;
+				
+				}else if(word.indexOf("sarı")  !== -1 && (!word.indexOf("sarık"))  !== -1){
+					//fill(255,255,20);
+					color[0] =255;
+					color[1] =255;
+					color[2] =20;
+					
+				}else if(word.indexOf("siyah")  !== -1 ||word.indexOf("kara")  !== -1 ){
+					//fill(255,255,20);
+					color[0] =0;
+					color[1] =0;
+					color[2] =0;	
+				}else if(word.indexOf("kırmızı")  !== -1){
+					color[0] =255;
+					color[1] =0;
+					color[2] =0;	
+				}else if(word.indexOf("yeşil")  !== -1){
+					color[0] =0;
+					color[1] =140;
+					color[2] =0;	
+				}else if(word.indexOf("mavi")  !== -1){
+					color[0] =0;
+					color[1] =0;
+					color[2] =200;	
+				}else if(word.indexOf("mor") !== -1 ){
+					color[0] =100;
+					color[1] =0;
+					color[2] =100;	
+				}
+				return color;
+			}
+				
+		}
+
+			killPrevGorsels();
+		
+			var canvasGorselSonuc = document.getElementById("canvasGorselSonuc");
+			// attaching the sketchProc function to the canvas
+			var processingInstance13 = new Processing(canvasGorselSonuc, sketchBubbleGorselResult);
+
+			arrayGorsels.push(processingInstance13);
+
+			$("#canvasGorselSonuc").css("width","100%");
+		//processingInstance2.noStroke();
 	}
 
 	$scope.sketchBarkodeGorselSonucCanvas = function (satırlar,words,affectiveResults,height,width){
@@ -722,13 +892,16 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		//processingInstance2.noStroke();
 	}
 
+	
+
 	$scope.sketchSifatGorselSonucCanvas = function (words,worklines,height,width){
 	
+		var hs1; //scroll bar is defined here because it should be global for updating its position in mouse wheel event. 
 
 		function sketchSifatGorselResult(processing) {
 			
-			var maxLineNum = 8;
-			var parts = 30
+			var parts = 30;
+			var numOfWordsToShowInInterval = 30; //number of words to show in the screen.
 
 			processing.setup = function(){
 				
@@ -738,11 +911,11 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 
 				var margin = processing.map(height,0,1080,0,60);
 
-				var slider_height = (height-margin)/parts;
+				var slider_height = (height-margin)/parts; // to determine slider's height. 
 
 				var bar_width = 16;
 
-				hs1 = new HScrollbar(width-bar_width, 0, bar_width, slider_height, bar_width,height);
+				hs1 = new HScrollbar(width-bar_width, 0, bar_width, slider_height, bar_width,height,this);
 			};
 
 			// Override draw function, by default it will be called 60 times per second
@@ -767,8 +940,10 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				var textY2= processing.map(height,0,1080,0,80);
 				var textX2= processing.map(width,0,1920,0,680) + leftShift;
 
+				//update and display scrollbar
 				hs1.update();
 				hs1.display();
+
 
 				processing.textSize( processing.map(width,0,1920,0,25));
 				processing.fill(0,0,200);
@@ -778,10 +953,11 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				processing.textSize( processing.map(width,0,1920,0,20));
 				processing.fill(0);
 
-				var startIndex = parseInt(parts * hs1.getPos());
-				console.log(hs1.getPos());
+				// get new starting index of words to show,
+				// by getting the position value of scrollbar which is between 0 and 1
+				var startIndex = parseInt(words.length * hs1.getPos());
 
-				for(var i=startIndex; i<Math.min(startIndex + 30, words.length) ;i++){
+				for(var i=startIndex; i<Math.min(startIndex + numOfWordsToShowInInterval, words.length) ;i++){
 
 					if(processing.mouseX<x+4*r && processing.mouseX>x-(4*r) 
 						&& processing.mouseY<y+(4*r) && processing.mouseY>y-(4*r)){
@@ -827,95 +1003,23 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 				else return false;	
 			}
 
-			var HScrollbar = function (xp, yp, sw, sh, l,h){
-				this.over;           // is the mouse over the slider?
-				this.locked;
-
-			    this.swidth = sw;
-			    this.sheight = sh;
-			    this.bheight = h;
-			    var widthtoheight = h - sh;
-			    this.ratio = sh / widthtoheight;
-			    this.xpos = xp;
-			    this.ypos = yp;
-			    this.spos = 0;
-			    this.newspos = this.spos;
-			    this.sposMin = this.spos;
-			    this.sposMax = h-sh;
-			    this.loose = l;
-				
-			}
-
-			HScrollbar.prototype.overEvent = function() {
-				if (processing.mouseX > this.xpos && processing.mouseX < this.xpos+ this.swidth &&
-				   processing.mouseY > this.ypos && processing.mouseY < this.ypos+ this.bheight) {
-				  return true;
-				} else {
-				  return false;
-				}
-			}
-
-			HScrollbar.prototype.constrain = function(val, minv, maxv) {
-				return Math.min(Math.max(val, minv), maxv);
-			}
-
-			HScrollbar.prototype.getPos = function () {
-				// Convert spos to be values between
-				// 0 and the total width of the scrollbar
-				return this.spos * this.ratio;
-			}
-
-			HScrollbar.prototype.display = function() {
-				processing.noStroke();
-				processing.fill(204);
-				processing.rect(this.xpos, this.ypos, this.swidth, this.bheight);
-				if (this.over || this.locked) {
-				  processing.fill(0, 0, 0);
-				} else {
-				  processing.fill(102, 102, 102);
-				}
-				processing.rect(this.xpos, this.spos, this.swidth, this.sheight);
-			}
-
-			HScrollbar.prototype.update = function() {
-				if (this.overEvent()) {
-				  this.over = true;
-				} else {
-				  this.over = false;
-				}
-				if (processing.mousePressed  && this.over) {
-				  this.locked = true;
-				}
-				if (!processing.mousePressed ) {
-				  this.locked = false;
-				}
-				if (this.locked) {
-				  this.newspos = this.constrain(processing.mouseY-this.swidth/2, this.sposMin, this.sposMax);
-				}
-				if (Math.abs(this.newspos - this.spos) > 1) {
-				  this.spos = this.spos + (this.newspos- this.spos)/this.loose;
-				}
-			}	
 		}
 
-			killPrevGorsels();
-		
-			var canvasGorselSonuc = document.getElementById("canvasGorselSonuc");
-			// attaching the sketchProc function to the canvas
-			var processingInstance9 = new Processing(canvasGorselSonuc, sketchSifatGorselResult);
+		killPrevGorsels();
+	
+		var canvasGorselSonuc = document.getElementById("canvasGorselSonuc");
+		// attaching the sketchProc function to the canvas
+		var processingInstance9 = new Processing(canvasGorselSonuc, sketchSifatGorselResult);
 
-			arrayGorsels.push(processingInstance9);
+		arrayGorsels.push(processingInstance9);
 
-			$("#canvasGorselSonuc").css("width","100%");
+		$("#canvasGorselSonuc").css("width","100%");
 
-			canvasGorselSonuc.addEventListener("mousedown",function(){
-				processingInstance9.mousePressed = true;
-			},false);
-			canvasGorselSonuc.addEventListener("mouseup",function(){
-				processingInstance9.mousePressed = false;	
-		},false);
-		//processingInstance2.noStroke();
+		addMouseUpDownWheelEventsToCanvas(canvasGorselSonuc,processingInstance9,hs1);
+
 	}
+
+	
 
 	$scope.sketchGorselSonucCanvas = function (words,height,width){
 	
@@ -1400,13 +1504,11 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
             
 			BaseAPI.callServlet('getWordsOfWorkWithParsedForm',{siirId:$scope.seciliSiir+""}).then(function(parsedWords) {
             
-				BaseAPI.callServlet('getAffectiveResultsOfWork',{siirId:$scope.seciliSiir+""}).then(function(affectiveResults) {
             		$scope.gorselSonucShow = true;
 
-            		$scope.drawBarkodeGorsel(siirLines,parsedWords,affectiveResults);
+            		$scope.drawBubbleGorsel(siirLines,parsedWords);
 
 					loadEnded();
-		        });
 	        });
         });
         
