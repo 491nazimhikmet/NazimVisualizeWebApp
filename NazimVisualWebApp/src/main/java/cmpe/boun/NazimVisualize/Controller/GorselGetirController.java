@@ -60,7 +60,7 @@ public class GorselGetirController {
 
 
 	}
-
+*/
 	@RequestMapping(value = "/WordCloudServlet", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public void WordCloudServlet(@ModelAttribute("siirId") String siirId,HttpServletResponse response)throws Exception {
 
@@ -83,6 +83,7 @@ public class GorselGetirController {
 
 	}
 	
+	/*
 	@RequestMapping(value = "/WordFrequencyGraphServlet",produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public void WordFrequencyGraphServlet(@ModelAttribute("searchText") String searchText,
 											@ModelAttribute("drawType") String drawType, //1: zaman, 2:mekan, 3:kitap

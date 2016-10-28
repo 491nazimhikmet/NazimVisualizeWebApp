@@ -1425,6 +1425,20 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 		$("#canvasGorselSonuc").css("width","100%");
 	}
 
+	$scope.getWordCloud = function(){
+ 		loadProgress();
+ 		BaseAPI.callServlet('WordCloudServlet',{siirId:$scope.seciliSiir+""}).then(function(responseText) {
+ 			$scope.gorselSonucShow = true;
+ 			$scope.showImgResult = true;
+ 
+             $('#imgGorselResult').attr('src',$scope.baseImagePathUrl+responseText); 
+             $('#imgGorselResult')[0].src =$scope.baseImagePathUrl+responseText; 
+         	 $("#imgGorselResult").show();
+ 
+ 			loadEnded();
+ 			
+         });
+ 	}
 
 
 	$scope.getGorsel = function(type){
