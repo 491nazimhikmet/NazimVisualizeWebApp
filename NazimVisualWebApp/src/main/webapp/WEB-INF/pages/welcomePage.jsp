@@ -22,6 +22,7 @@
 <script src="${pageContext.request.contextPath}/resources/main.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
 <title>Nazım Hikmet Şiirlerini Görselleştirme</title>
 <script type="text/javascript">
 	var showGiris = false;

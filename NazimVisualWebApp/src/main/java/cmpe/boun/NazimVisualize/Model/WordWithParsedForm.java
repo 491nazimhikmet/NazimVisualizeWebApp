@@ -4,21 +4,21 @@ import java.util.List;
 
 public class WordWithParsedForm {
 
-	private int wordID;
-	private String text;
-	private double wordStart;
-	private double wordFinish;
-	private int workLineID;
+	protected int wordID;
+	protected String text;
+	protected double wordStart;
+	protected double wordFinish;
+	protected int workLineID;
 	
-	private boolean isBold;
-	private boolean isItalic;
-	private String font;
+	protected boolean isBold;
+	protected boolean isItalic;
+	protected String font;
 	
-	private String disambiguated;
+	protected String disambiguated;
 	
-	private String parsedForm;
+	protected String parsedForm;
 	
-	private List<Word> words;
+	protected List<Word> words;
 
 	
 	public WordWithParsedForm(){

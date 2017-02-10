@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import cmpe.boun.NazimVisualize.Model.ParsedWordsWork;
+import cmpe.boun.NazimVisualize.Model.ParsedWordsWorkPlace;
 import cmpe.boun.NazimVisualize.Model.PlaceWordLocation;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
 import cmpe.boun.NazimVisualize.Model.TermFreqYear;
@@ -43,6 +45,39 @@ public class WordDao extends DBConnection{
 		String query = "SELECT w.*,wp.parsedForm FROM word w,wordParseForms wp WHERE w.wordId = wp.wordId and wp.probOrder = 1 and workLineId IN (SELECT lineId from workline WHERE WorkId ="+Integer.toString(workID)+")";
 		//dbde workID de tutalım
 		List<WordWithParsedForm> returnlist = Extractors.extractWordsWithParsedForm(this.getStmt().executeQuery(query));
+		 closeConnection();
+		 return returnlist; 
+	}
+	
+	public List<ParsedWordsWork> getWordsWithParsedFormAllWork() throws SQLException{
+		String query = "SELECT w.*,wp.parsedForm,wl.workId,wl.name FROM word w,wordParseForms wp,(SELECT wl.lineId, wl.workId,w.name from workline wl,(select workId,name from work where year != '') w where wl.workId = w.workId ) wl WHERE w.wordId = wp.wordId and wp.probOrder = 1 and w.workLineId = wl.lineId" 
+					+"	order by wl.workId";
+
+		List<ParsedWordsWork> returnlist = Extractors.extractParsedWordsWork(this.getStmt().executeQuery(query));
+		 closeConnection();
+		 return returnlist; 
+	}
+	
+	public List<ParsedWordsWorkPlace> getWordsWithParsedFormAllWorkForPlace() throws SQLException{
+		String query =
+				"SELECT w.*,wp.parsedForm,wl.workId,wl.name,wl.location	"+
+				"  FROM word w,wordParseForms wp,	"+
+				"      (SELECT wl.lineId, wl.workId,w.name ,w.location 	"+
+				"    from workline wl, 	"+
+				"    	(SELECT w.workId, w.name, 	"+
+				"        case  	"+
+				"           when w.locationOfComp != '' then w.locationOfComp 	"+
+				"           else b.location 	"+
+				"        end as location 	"+
+				"        FROM work w, book b 	"+
+				"        WHERE w.bookId = b.bookId 	"+
+				"        and (w.locationOfComp != '' or b.location != '')) w 	"+ 
+				"    where wl.workId = w.workId ) wl  	"+
+				"  WHERE w.wordId = wp.wordId and wp.probOrder = 1 and w.workLineId = wl.lineId	"+ 
+				"  order by wl.workId";
+
+		System.out.println(query);
+		List<ParsedWordsWorkPlace> returnlist = Extractors.extractParsedWordsWorkPlace(this.getStmt().executeQuery(query));
 		 closeConnection();
 		 return returnlist; 
 	}

@@ -7,6 +7,12 @@ import java.util.List;
 
 import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 import cmpe.boun.NazimVisualize.Model.Book;
+import cmpe.boun.NazimVisualize.Model.EcevitSentence;
+import cmpe.boun.NazimVisualize.Model.EcevitWord;
+import cmpe.boun.NazimVisualize.Model.EcevitWordWithParsed;
+import cmpe.boun.NazimVisualize.Model.EcevitWork;
+import cmpe.boun.NazimVisualize.Model.ParsedWordsWork;
+import cmpe.boun.NazimVisualize.Model.ParsedWordsWorkPlace;
 import cmpe.boun.NazimVisualize.Model.PlaceWordLocation;
 import cmpe.boun.NazimVisualize.Model.TermFreqBook;
 import cmpe.boun.NazimVisualize.Model.TermFreqPlace;
@@ -211,6 +217,53 @@ public class Extractors {
 		
 		return result;
 	}
+
+	public static List<ParsedWordsWork> extractParsedWordsWork(ResultSet rs) throws SQLException{
+		List<ParsedWordsWork> result = new ArrayList<ParsedWordsWork>();
+		
+		while(rs.next()){
+			ParsedWordsWork word = new ParsedWordsWork();
+			word.setBold(rs.getBoolean("isBold"));
+			word.setFont(rs.getString("font"));
+			word.setItalic(rs.getBoolean("isItalic"));
+			word.setText(rs.getString("text"));
+			word.setWordFinish(rs.getDouble("wordFinish"));
+			word.setWordID(rs.getInt("wordId"));
+			word.setWordStart(rs.getDouble("wordStart"));
+			word.setWorkLineID(rs.getInt("workLineId"));
+			word.setParsedForm(rs.getString("parsedForm"));
+			word.setDisambiguated(rs.getString("disambiguated"));	
+			word.setWorkId(rs.getInt("workId"));
+			word.setWorkName(rs.getString("name"));
+			result.add(word);
+		}
+		
+		return result;
+	}
+	
+	public static List<ParsedWordsWorkPlace> extractParsedWordsWorkPlace(ResultSet rs) throws SQLException{
+		List<ParsedWordsWorkPlace> result = new ArrayList<ParsedWordsWorkPlace>();
+		
+		while(rs.next()){
+			ParsedWordsWorkPlace word = new ParsedWordsWorkPlace();
+			word.setBold(rs.getBoolean("isBold"));
+			word.setFont(rs.getString("font"));
+			word.setItalic(rs.getBoolean("isItalic"));
+			word.setText(rs.getString("text"));
+			word.setWordFinish(rs.getDouble("wordFinish"));
+			word.setWordID(rs.getInt("wordId"));
+			word.setWordStart(rs.getDouble("wordStart"));
+			word.setWorkLineID(rs.getInt("workLineId"));
+			word.setParsedForm(rs.getString("parsedForm"));
+			word.setDisambiguated(rs.getString("disambiguated"));	
+			word.setWorkId(rs.getInt("workId"));
+			word.setWorkName(rs.getString("name"));
+			word.setLocation(rs.getString("location"));
+			result.add(word);
+		}
+		
+		return result;
+	}
 	
 	public static List<AffectiveResult> extractAffectiveResults(ResultSet rs) throws SQLException{
 		
@@ -253,6 +306,88 @@ public class Extractors {
 			String cur = rs.getString("location");
 		
 			result.add(cur);
+		}
+		
+		return result;
+	}
+	
+	public static List<EcevitWork> extractEcevitWork(ResultSet rs) throws SQLException{
+		List<EcevitWork> result = new ArrayList<EcevitWork>();
+		
+		while(rs.next()){
+			EcevitWork ec = new EcevitWork();		
+			ec.setWorkID(rs.getInt("workId"));
+			ec.setPageId(rs.getInt("pageId"));
+			ec.setHeader(rs.getString("header"));
+			ec.setSource(rs.getString("source"));
+			ec.setDate(rs.getString("date"));
+			ec.setLocation(rs.getString("location"));
+			ec.setFullText(rs.getString("fullText"));
+			ec.setFiles(rs.getString("files"));
+			ec.setCollection(rs.getString("collection"));
+			ec.setTags(rs.getString("tags"));
+			ec.setCitation(rs.getString("citation"));
+			
+			result.add(ec);
+		}
+		
+		return result;
+	}
+	
+	public static List<EcevitSentence> extractEcevitSentences(ResultSet rs) throws SQLException{
+		List<EcevitSentence> result = new ArrayList<EcevitSentence>();
+		
+		while(rs.next()){
+			EcevitSentence sentence = new EcevitSentence();
+			sentence.setSentenceId(rs.getInt("sentenceId"));
+			sentence.setText(rs.getString("text"));
+			sentence.setArousal(rs.getString("arousal"));
+			sentence.setDominance(rs.getString("dominance"));
+			sentence.setTokenized_text(rs.getString("tokenized_text"));
+			sentence.setValence(rs.getString("valence"));
+			sentence.setWorkID(rs.getInt("workId"));
+			
+			result.add(sentence);
+		}
+		
+		return result;
+	}
+	
+	public static List<EcevitWord> extractEcevitWord(ResultSet rs) throws SQLException{
+		List<EcevitWord> result = new ArrayList<EcevitWord>();
+		
+		while(rs.next()){
+			EcevitWord word = new EcevitWord();
+			word.setWordID(rs.getInt("wordId"));
+			word.setWord(rs.getString("word"));
+			word.setSentenceId(rs.getInt("sentenceId"));
+			word.setArousal(rs.getString("arousal"));
+			word.setDominance(rs.getString("dominance"));		
+			word.setValence(rs.getString("valence"));
+			word.setDisambiguated(rs.getString("disambiguated"));
+			
+			
+			result.add(word);
+		}
+		
+		return result;
+	}
+	
+	public static List<EcevitWordWithParsed> extractEcevitWordsWithParsedForm(ResultSet rs) throws SQLException{
+		List<EcevitWordWithParsed> result = new ArrayList<EcevitWordWithParsed>();
+		
+		while(rs.next()){
+			EcevitWordWithParsed word = new EcevitWordWithParsed();
+			word.setWordID(rs.getInt("wordId"));
+			word.setWord(rs.getString("word"));
+			word.setSentenceId(rs.getInt("sentenceId"));
+			word.setArousal(rs.getString("arousal"));
+			word.setDominance(rs.getString("dominance"));		
+			word.setValence(rs.getString("valence"));
+			word.setDisambiguated(rs.getString("disambiguated"));
+			word.setParsedForm(rs.getString("parsedForm"));
+			
+			result.add(word);
 		}
 		
 		return result;

@@ -68,7 +68,7 @@ public class WorkDao extends DBConnection{
 	}
 	
 	public List<Work> getAllWorks() throws SQLException{
-		String query = "SELECT * FROM Work";
+		String query = "SELECT * FROM Work order by workId";
 		return Extractors.extractWork(this.getStmt().executeQuery(query));
 	}
 	

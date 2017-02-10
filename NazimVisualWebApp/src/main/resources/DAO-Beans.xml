@@ -29,4 +29,16 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<bean id="EcevitSentenceDao" class="cmpe.boun.NazimVisualize.DAO.EcevitSentenceDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="EcevitWordDao" class="cmpe.boun.NazimVisualize.DAO.EcevitWordDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="EcevitCalismalarDao" class="cmpe.boun.NazimVisualize.DAO.EcevitCalismalarDAO">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
 </beans>

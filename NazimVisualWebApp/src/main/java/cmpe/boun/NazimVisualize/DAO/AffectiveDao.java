@@ -30,6 +30,14 @@ public class AffectiveDao extends DBConnection{
 		return returnlist; 
 	}
 	
+	public List<AffectiveResult> getEcevitResultsByWorkId(int workID) throws SQLException{
+		String query="SELECT * FROM `ecevit_affectiveresults` WHERE `type` = 1 and textId in(select sentenceId from ecevit_sentence where workId ="+Integer.toString(workID)+" )order by textId";
+
+		List<AffectiveResult> returnlist = Extractors.extractAffectiveResults(this.getStmt().executeQuery(query));
+		
+		return returnlist; 
+	}
+	
 	public Statement getStmt() {
 		return stmt;
 	}

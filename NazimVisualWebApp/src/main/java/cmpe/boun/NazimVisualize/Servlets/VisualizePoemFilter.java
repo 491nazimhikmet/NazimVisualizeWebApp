@@ -38,9 +38,7 @@ private ArrayList<String> urlList;
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		String url = request.getServletPath();
-		
-		System.out.println("url is "+url);
-		
+				
 		boolean lookRequest = true;
 		boolean error = false;
 		

@@ -42,6 +42,11 @@ public class BaseController {
 		    model.addAttribute("user2", new User()); 
 	       return "welcomePage";
 		}
+
+		@RequestMapping(value = { "/ecevit" }, method = RequestMethod.GET)
+		public String ecevit() {
+	       return "ecevit";
+		}
 	 
 	 
 		@RequestMapping(value = "/login", produces = "text/plain;charset=UTF-8", method = RequestMethod.POST)

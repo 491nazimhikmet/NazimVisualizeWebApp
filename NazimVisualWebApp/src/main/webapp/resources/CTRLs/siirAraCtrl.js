@@ -84,7 +84,21 @@ app.controller('siirAraCtrl', ['$scope','$http','BaseAPI','appConfig',function($
 	    var dt = document.getElementById("canvasGorselSonuc").toDataURL();
 	    this.href = dt;
 	};
-	downloadLnk.addEventListener('click', download, false);
+	//downloadLnk.addEventListener('click', download, false);
+
+	downloadLnk.addEventListener("click", function() {
+		var canvas = document.getElementById('canvasGorselSonuc');
+
+		// only jpeg is supported by jsPDF
+		var imgData = canvas.toDataURL("image/jpeg", 1.0);
+		//window.location = imgData;
+		var pdf = new jsPDF('p','pt','a2');
+
+		pdf.addImage(imgData, 'JPEG', 0,0,1350, 750);
+		var downloadLnk = document.getElementById('downloadLnk');
+
+		pdf.save("GorselSonuc.pdf");
+	}, false);
 
 	
 	function convertDataURLToImageData(dataURL, callback) {
