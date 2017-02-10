@@ -17,13 +17,15 @@
 <script src="${pageContext.request.contextPath}/resources/CTRLs/ecevitDenemeCTRL.js"></script>
 <script src="${pageContext.request.contextPath}/resources/processing-1.4.8.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.css">
 <!-- bu script font için script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script--> 
 <title>Ecevit Yazıları Görselleştirme</title>
 <style type="text/css">
 	.scroll {
 	   overflow-y: scroll; 
-	   height:500px;
-	   height: 100vh;
+	   height:400px;
+	   //height: 100vh;
 	}
 	.scroll::-webkit-scrollbar {
 	    width: 12px;
@@ -38,6 +40,13 @@
 	    border-radius: 10px;
 	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 	}
+</style>
+<style type="text/css">
+    #mynetwork {
+        width: 600px;
+        height: 400px;
+        border: 1px solid lightgray;
+    }
 </style>
 
 
@@ -84,6 +93,7 @@
 			<div class="row">
 				<button class="btn btn-info" type="button" ng-click="makeOperation(1)">Affect Analyzer</button>
 				<button class="btn btn-info" type="button" ng-click="makeOperation(2)">Seçili Çalışmayı Oku</button>
+				<button class="btn btn-info" type="button" ng-click="makeOperation(3)">Draw graph</button>
 			</div>
 
 			<div class="row" ng-show="gorselSonucShow" style="text-align:center;">
@@ -93,6 +103,10 @@
 				<div class="row"> 
 					<canvas id="canvasGorselSonuc" width="1170" height="657" ></canvas>
 				</div>
+			</div>
+
+			<div ng-show="showGraphNetResult">
+				<div id="mynetwork" width="1170" height="657"></div>
 			</div>
 
 		</div>

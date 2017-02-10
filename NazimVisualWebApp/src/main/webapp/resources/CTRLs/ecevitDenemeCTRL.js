@@ -46,6 +46,8 @@ app.controller('ecevitDenemeCTRL', ['$scope','$http','BaseAPI',function($scope,$
 				$scope.getEffectAnalyzer();
 			}else if(type == 2){
 				$scope.readSelectedWork();	
+			}else if (type == 3){
+				$scope.drawGraph();
 			}
 			$scope.shownWorkName = $scope.selectedWork.header;
 			
@@ -62,6 +64,92 @@ app.controller('ecevitDenemeCTRL', ['$scope','$http','BaseAPI',function($scope,$
 		for(var i=0; i<arrayGorsels.length; i++){
 			arrayGorsels[i].exit();
 		}
+	}
+
+
+	$scope.drawGraph = function(){
+		BaseAPI.callServlet('getGraphNetData',{}).then(function(graphData) {
+    		$scope.showGraphNetResult = true;
+    		    // create an array with nodes
+		    /*var nodes = new vis.DataSet([
+		        {id: 1, label: 'Node 1'},
+		        {id: 2, label: 'Node 2'},
+		        {id: 3, label: 'Node 3'},
+		        {id: 4, label: 'Node 4'},
+		        {id: 5, label: 'Node 5'}
+		    ]);
+
+		    // create an array with edges
+		    var edges = new vis.DataSet([
+		        {from: 1, to: 3},
+		        {from: 1, to: 2},
+		        {from: 2, to: 4},
+		        {from: 2, to: 5}
+		    ]);*/
+		    var nodes = graphData.vn;
+		    var edges = graphData.ve.slice(0,20);
+
+		    // create a network
+		    var container = document.getElementById('mynetwork');
+
+		    // provide the data in the vis format
+		    var data = {
+		        nodes: nodes,
+		        edges: edges
+		    };
+		   
+			var options = {
+		      nodes: {
+		          shape: 'dot',
+		          shadow:true,
+		          font: {
+		            size: 12,
+		          },
+		      },
+		      edges: {
+		          shadow:true,
+		          font: {
+		            align: 'top',
+		            size: 8,
+		          },
+		      },
+		      interaction: {
+		        hover: true,
+		        navigationButtons: true,
+		        keyboard: false,
+		      },
+		      physics: {
+		        // enabled: true,
+		      },
+		      layout: {
+		        randomSeed: 8
+		      }/*,
+		      manipulation: {
+		        enabled: false,
+		        addEdge: function(edgeData,callback) {
+		          console.log(edgeData);
+		          if (edgeData.from === edgeData.to) {
+		            var r = confirm("Do you want to connect the node to itself?");
+		            if (r === true) {
+		              callback(edgeData);
+		            }
+		          }
+		          else {
+		            // console.log(nodes);
+		            var allNodes = nodes.get({returnType:"Object"});
+		            $('#connectionSource').val(allNodes[edgeData.from].title); 
+		            $('#connectionTarget').val(allNodes[edgeData.to].title); 
+		            document.getElementById('addConnectionButton').onclick = saveData.bind(this, edgeData, callback);
+		            $('#addConnectionModal').modal('show');
+		            // callback(edgeData);
+		          }
+		        }
+		      }*/
+		    };
+		    // initialize your network!
+		    var network = new vis.Network(container, data, options);
+			loadEnded();
+		});
 	}
 
 	$scope.getEffectAnalyzer = function(){

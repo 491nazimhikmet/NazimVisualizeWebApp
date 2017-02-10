@@ -1,7 +1,13 @@
 package cmpe.boun.NazimVisualize.Controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +29,9 @@ import cmpe.boun.NazimVisualize.Model.AffectiveResult;
 import cmpe.boun.NazimVisualize.Model.EcevitSentence;
 import cmpe.boun.NazimVisualize.Model.EcevitWordWithParsed;
 import cmpe.boun.NazimVisualize.Model.EcevitWork;
+import cmpe.boun.NazimVisualize.Model.VisEdge;
+import cmpe.boun.NazimVisualize.Model.VisNode;
+import cmpe.boun.NazimVisualize.Model.VisResult;
 import cmpe.boun.NazimVisualize.Model.WordWithParsedForm;
 
 @Controller
@@ -151,5 +160,60 @@ public class EcevitYaziAramaController {
 
 	}
 
+	@RequestMapping(value = "/getGraphNetData", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public void getGraphNetData(HttpServletResponse response)
+			throws Exception {
+
+		File fileDir = new File("category_network.net");
+		//Scanner br = new Scanner(new FileReader("category_network.net","UTF-8"));
+		BufferedReader br = new BufferedReader(
+		           new InputStreamReader(new FileInputStream(fileDir), "UTF-8"));
+	    String line;
+	    Boolean isVertices = false;
+	    int numOfVertices =0; 
+	    ArrayList<VisNode> vnList = new ArrayList<VisNode>();
+	    ArrayList<VisEdge> veList = new ArrayList<VisEdge>();
+	    line = br.readLine();
+       if(line.toLowerCase().contains("*vertices")){
+    	   isVertices = true;
+    	   numOfVertices = Integer.parseInt(line.split(" ")[1]);
+    	   for(int i = 0;i < numOfVertices; i++){
+    		   String nl = br.readLine();
+    		   String id = nl.substring(0, nl.indexOf("\""));
+    		   VisNode vn = new VisNode();
+    		   vn.id = Integer.parseInt(id.trim());
+    		   String parts = nl.substring(nl.indexOf("\""), nl.lastIndexOf("\"")+1);
+    		   vn.label = parts.substring(1, parts.length()-1);
+    		   vnList.add(vn);
+    	   }
+       }
+       
+       line = br.readLine();
+       if(line.toLowerCase().contains("*arc")){
+    	   isVertices = true;
+    	   String newLine = "";
+    	   while ((newLine = br.readLine()) != null) {
+    		   
+    		   if(newLine.trim().equals("")) break;
+    		   VisEdge ve = new VisEdge();
+    		   String[] parts = newLine.split(" ");
+    		   
+    		   ve.from = Integer.parseInt(parts[0]);
+    		   ve.to = Integer.parseInt(parts[1]);
+    		   veList.add(ve);
+    	   }
+       }
+	    
+		br.close();
+		VisResult vr = new VisResult();
+		vr.ve = veList;
+		vr.vn = vnList;
+		String json = new Gson().toJson(vr);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
+	}
 	
 }
